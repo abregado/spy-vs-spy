@@ -1,24 +1,37 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class MeshRegistry : MonoBehaviour {
     public Mesh[] itemMeshes;
+    private Dictionary<ItemType, Mesh> _items;
 
-    public enum itemTypes {
+    public enum ItemType {
         None,
         Briefcase,
-        Key,
-        Passport,
+        Rope,
+        Disguise,
         Money,
-        Ticket,
+        Bomb,
     }
 
-    public Mesh GetMesh(itemTypes itemType) {
-        int meshIndex = (int) itemType - 1;
-        if (itemMeshes[meshIndex] != null) {
-            return itemMeshes[meshIndex];
+    void Awake() {
+        _items = new Dictionary<ItemType, Mesh>();
+
+        for (int i = 1; i < itemMeshes.Length; i++) {
+            _items.Add((ItemType) i,itemMeshes[i-1]);
         }
+    }
+    
+    
+
+    public Mesh GetMesh(ItemType itemType) {
+        if (_items.ContainsKey(itemType)) {
+            return _items[itemType];
+        }
+        
         return null;
     }
 }
