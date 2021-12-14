@@ -30,5 +30,15 @@ public class BriefcaseHandler : MonoBehaviour {
 
         return false;
     }
+
+    public bool IsComplete() {
+        foreach (bool state in slotStates) {
+            if (state == false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
     
 }

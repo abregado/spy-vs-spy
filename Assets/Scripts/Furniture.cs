@@ -14,7 +14,6 @@ public class Furniture: MonoBehaviour, IInteractable {
         _briefcase = FindObjectOfType<BriefcaseHandler>();
     }
     
-    
     public void OnInteract(Spy spy) {
         if (spy.inventory == MeshRegistry.ItemType.Briefcase && (inventory == MeshRegistry.ItemType.None | inventory == MeshRegistry.ItemType.Briefcase) == false && _briefcase.CheckNeedsItem(inventory)) {
             _briefcase.PutInItem(inventory);

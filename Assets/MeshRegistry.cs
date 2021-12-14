@@ -20,7 +20,7 @@ public class MeshRegistry : MonoBehaviour {
     void Awake() {
         _items = new Dictionary<ItemType, Mesh>();
 
-        for (int i = 1; i < itemMeshes.Length; i++) {
+        for (int i = 1; i < itemMeshes.Length+1; i++) {
             _items.Add((ItemType) i,itemMeshes[i-1]);
         }
     }
