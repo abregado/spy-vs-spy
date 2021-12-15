@@ -5,6 +5,7 @@ public class Furniture: MonoBehaviour, IInteractable {
     public bool interactable { get; }
 
     public MeshRegistry.ItemType inventory;
+    public Room myRoom;
 
     private DOTweenAnimation _animation;
     private BriefcaseHandler _briefcase;

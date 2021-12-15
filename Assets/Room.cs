@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Room : MonoBehaviour {
     public int depthLayer;
-
+    public Vector2Int mapPosition;
+    
     private CinemachineVirtualCamera[] _cameras;
     private Waypoint[] _waypoints;
 
