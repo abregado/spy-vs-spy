@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 550035887093880551}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 6812466154492963982, guid: 9cc3466ce1ed7ea479f1c0be445f5da1, type: 3}
 --- !u!23 &6682574227529033843
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -105,6 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7296661439608522287}
   - component: {fileID: 4692404296864596234}
+  - component: {fileID: 1982620316}
   m_Layer: 0
   m_Name: Spy
   m_TagString: Untagged
@@ -142,6 +143,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerIndex: 0
   inventory: 0
+  moveSpeed: 3
+--- !u!143 &1982620316
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3102152305396433643}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5406265067968497502
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,7 +222,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: a6223d1f206b70e4ba532de524aa5c14, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
