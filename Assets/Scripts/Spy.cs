@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Rewired;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,6 +13,7 @@ public class Spy: MonoBehaviour {
     private MeshRenderer _inventoryRenderer;
     private MeshRegistry _meshRegistry;
     private Collider _collider;
+    private ParticleSystem _trapDeathParticles;
     
     //Movement Stuff
     public float moveSpeed = 3.0f;
@@ -44,7 +46,8 @@ public class Spy: MonoBehaviour {
         _meshRegistry = FindObjectOfType<MeshRegistry>();
         _handler = FindObjectOfType<SpyHandler>();
         _collider = GetComponent<Collider>();
-        
+        _trapDeathParticles = transform.Find("DomeNukeRed").GetComponent<ParticleSystem>();
+
         player = ReInput.players.GetPlayer(playerIndex);
         cc = GetComponent<CharacterController>();
     }
@@ -55,6 +58,7 @@ public class Spy: MonoBehaviour {
         _isAlive = false;
         _hasMadeInput = false;
         SetVisible(false);
+        _trapDeathParticles.Stop();
     }
     
     public void SetInventoryMesh() {
@@ -216,7 +220,8 @@ public class Spy: MonoBehaviour {
         _respawnTimer = Time.time + RESPAWN_TIME;
         _isAlive = false;
         SetVisible(false);
-        _cameraSystem.SwitchCameraToRoom(playerIndex,0);
+        StartCoroutine(nameof(ChangeCameraToDeathRoom));
+        _trapDeathParticles.Play();
         _collider.enabled = false;
         
         if (currentRoom.HasAnyFurnitureEmpty()) {
@@ -234,7 +239,8 @@ public class Spy: MonoBehaviour {
         _respawnTimer = Time.time + RESPAWN_TIME;
         _isAlive = false;
         SetVisible(false);
-        _cameraSystem.SwitchCameraToRoom(playerIndex,0);
+        StartCoroutine(nameof(ChangeCameraToDeathRoom));
+        _trapDeathParticles.Play();
 
         if (inventory != MeshRegistry.ItemType.None && spy.inventory == MeshRegistry.ItemType.None) {
             spy.inventory = inventory;
@@ -250,6 +256,11 @@ public class Spy: MonoBehaviour {
                 inventory = MeshRegistry.ItemType.None;
             }
         }
+    }
+
+    private IEnumerator ChangeCameraToDeathRoom() {
+        yield return new WaitForSeconds(3);
+        _cameraSystem.SwitchCameraToRoom(playerIndex,0);
     }
 
     private void Respawn() {
