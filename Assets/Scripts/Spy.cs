@@ -1,14 +1,17 @@
-﻿using Rewired;
+﻿using System;
+using Rewired;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Spy: MonoBehaviour {
     public int playerIndex;
     public MeshRegistry.ItemType inventory;
-    private Room _currentRoom;
+    public Room currentRoom;
 
     private MeshFilter _inventoryMesh;
     private MeshRenderer _inventoryRenderer;
     private MeshRegistry _meshRegistry;
+    private Collider _collider;
     
     //Movement Stuff
     public float moveSpeed = 3.0f;
@@ -19,18 +22,39 @@ public class Spy: MonoBehaviour {
     private bool _set;
     private bool _attack;
     private bool _map;
+    private bool _isTeleporting;
+    private Door _teleportDestination;
+
+    private RoomCameraSystem _cameraSystem;
+    private ItemHider _itemHider;
+    private SpyHandler _handler;
+    private int _interactionLayerMask = 1 << 3;
+
+    private bool _isAlive;
+    private bool _isPlaying;
+    private bool _hasMadeInput;
+    private float _respawnTimer;
+    private const float RESPAWN_TIME = 30f;
     
     void Awake() {
+        _itemHider = FindObjectOfType<ItemHider>();
+        _cameraSystem = FindObjectOfType<RoomCameraSystem>();
         _inventoryMesh = transform.Find("Inventory").GetComponent<MeshFilter>();
         _inventoryRenderer = transform.Find("Inventory").GetComponent<MeshRenderer>();
         _meshRegistry = FindObjectOfType<MeshRegistry>();
+        _handler = FindObjectOfType<SpyHandler>();
+        _collider = GetComponent<Collider>();
         
         player = ReInput.players.GetPlayer(playerIndex);
         cc = GetComponent<CharacterController>();
     }
     
     void Start() {
-        SetInventoryMesh();   
+        SetInventoryMesh();
+        _isPlaying = false;
+        _isAlive = false;
+        _hasMadeInput = false;
+        SetVisible(false);
     }
     
     public void SetInventoryMesh() {
@@ -38,14 +62,47 @@ public class Spy: MonoBehaviour {
         _inventoryMesh.mesh = _meshRegistry.GetMesh(inventory);
     }
 
-    public void ChangeRoom(Room targetRoom) {
-        _currentRoom = targetRoom;
-        transform.position = _currentRoom.GetWaypointPosition(playerIndex);
+    public void GoToDoor(Door door) {
+        _teleportDestination = door;
+        _isTeleporting = true;
+        
     }
     
     void Update () {
+        if (_isAlive == false && _isPlaying == false && _hasMadeInput) {
+            Respawn();
+            _isPlaying = true;
+            return;
+        }
+        
+        if (_isPlaying && _isAlive == false && Time.time > _respawnTimer) {
+            Respawn();
+            return;
+        }
+        
         GetInput();
-        ProcessInput();
+        ProcessInput();    
+        
+        if (_isAlive && _isPlaying) {
+            if (_isTeleporting == false) {
+                ProcessMovement();
+            }
+            else {
+                CompleteTeleport();
+            }
+        }
+
+        
+    }
+
+
+    private void CompleteTeleport() {
+        currentRoom = _teleportDestination.myRoom;
+        cc.enabled = false;
+        transform.SetPositionAndRotation(_teleportDestination.GetExitPosition(),Quaternion.identity);
+        cc.enabled = true;
+        _isTeleporting = false;
+        _cameraSystem.SwitchCameraToRoom(playerIndex,currentRoom);
     }
 
     private void GetInput() {
@@ -57,15 +114,159 @@ public class Spy: MonoBehaviour {
         _map = player.GetButtonDown("Map");
     }
 
-    private void ProcessInput() {
+    private void ProcessMovement() {
         if(_moveVector.x != 0.0f || _moveVector.y != 0.0f) {
-            cc.Move(_moveVector * moveSpeed * Time.deltaTime);
+            Vector3 frameVector = _moveVector.normalized * moveSpeed * Time.deltaTime * -1f;
+            Vector3 actualMoveVector = new Vector3(frameVector.x, 0f, frameVector.y);
+            cc.Move(actualMoveVector);
+            transform.LookAt(transform.position+actualMoveVector);
+        }
+    }
+
+    private void ProcessInput() {
+        // Debug.Log("-------------");
+        if (_interact) {
+            _hasMadeInput = true;
+            if (_isAlive) {
+                Interact();
+            }
+
+            //Debug.Log("Interact");
+        }
+
+        if (_set) {
+            _hasMadeInput = true;
+            if (_isAlive) {
+                SetTrap();
+            }
+            //Debug.Log("Set");
+        }
+
+        if (_attack) {
+            _hasMadeInput = true;
+            //Debug.Log("Attack");
+        }
+
+        if (_map) {
+            _hasMadeInput = true;
+            //Debug.Log("Map");
         }
         // Debug.Log("-------------");
-        if (_interact) Debug.Log("Interact");
-        if (_set) Debug.Log("Set");
-        if (_attack) Debug.Log("Attack");
-        if (_map) Debug.Log("Map");
-        // Debug.Log("-------------");
+    }
+
+    private void Interact() {
+        IInteractable interactable = GetClosestInteractable();
+        if (interactable != null) {
+            interactable.OnInteract(this);
+        }
+    }
+
+    private void SetTrap() {
+        ICanBeTrapped trappable = GetClosestTrappable();
+        if (trappable != null) {
+            trappable.OnTrapSet(this);
+        }
+    }
+    
+    public IInteractable GetClosestInteractable() {
+        Vector3 frontPos = transform.position + (transform.forward * 0.25f);
+        Collider[] inRange = Physics.OverlapSphere(frontPos, 0.25f,_interactionLayerMask);
+        
+        IInteractable closest = null;
+
+        float closestDistance = 1000f;
+
+        foreach (Collider collider in inRange) {
+            GameObject colliderObject = collider.gameObject;
+            IInteractable interactable = colliderObject.GetComponent<IInteractable>();
+            float distanceToTarget = Vector3.Distance(colliderObject.transform.position, frontPos);
+            if (interactable != null && interactable.interactable && distanceToTarget < closestDistance)
+                if (colliderObject != gameObject) {
+                    closest = interactable;
+                    closestDistance = distanceToTarget;
+                }
+        }
+
+        return closest;
+    }
+    
+    public ICanBeTrapped GetClosestTrappable() {
+        Vector3 frontPos = transform.position + (transform.forward * 0.25f);
+        Collider[] inRange = Physics.OverlapSphere(frontPos, 0.25f,_interactionLayerMask);
+        
+        ICanBeTrapped closest = null;
+
+        float closestDistance = 1000f;
+
+        foreach (Collider collider in inRange) {
+            GameObject colliderObject = collider.gameObject;
+            ICanBeTrapped trappable = colliderObject.GetComponent<ICanBeTrapped>();
+            float distanceToTarget = Vector3.Distance(colliderObject.transform.position, frontPos);
+            if (trappable != null && trappable.trappable && distanceToTarget < closestDistance)
+                if (colliderObject != gameObject) {
+                    closest = trappable;
+                    closestDistance = distanceToTarget;
+                }
+        }
+
+        return closest;
+    }
+
+    public void KillByTrap(Room room) {
+        _respawnTimer = Time.time + RESPAWN_TIME;
+        _isAlive = false;
+        SetVisible(false);
+        _cameraSystem.SwitchCameraToRoom(playerIndex,0);
+        _collider.enabled = false;
+        
+        if (currentRoom.HasAnyFurnitureEmpty()) {
+            currentRoom.HideItem(inventory);
+            inventory = MeshRegistry.ItemType.None;
+        }
+        else {
+            _itemHider.HideItemAnywhere(inventory);
+            inventory = MeshRegistry.ItemType.None;
+        }
+        
+    }
+
+    public void KillBySpy(Spy spy) {
+        _respawnTimer = Time.time + RESPAWN_TIME;
+        _isAlive = false;
+        SetVisible(false);
+        _cameraSystem.SwitchCameraToRoom(playerIndex,0);
+
+        if (inventory != MeshRegistry.ItemType.None && spy.inventory == MeshRegistry.ItemType.None) {
+            spy.inventory = inventory;
+            inventory = MeshRegistry.ItemType.None;
+        }
+        else {
+            if (currentRoom.HasAnyFurnitureEmpty()) {
+                currentRoom.HideItem(inventory);
+                inventory = MeshRegistry.ItemType.None;
+            }
+            else {
+                _itemHider.HideItemAnywhere(inventory);
+                inventory = MeshRegistry.ItemType.None;
+            }
+        }
+    }
+
+    private void Respawn() {
+        Room emptyRoom = _handler.GetEmptyRoomForRespawn();
+
+        cc.enabled = false;
+        transform.position = emptyRoom.GetWaypointPosition(playerIndex);
+        cc.enabled = true;
+
+        currentRoom = emptyRoom;
+        _cameraSystem.SwitchCameraToRoom(playerIndex,currentRoom);
+        SetVisible(true);
+        _isAlive = true;
+    }
+
+    private void SetVisible(bool state) {
+        transform.Find("View").gameObject.SetActive(state);
+        _collider.enabled = state;
     }
 }

@@ -26,4 +26,18 @@ public class ItemHider : MonoBehaviour {
             }
         }
     }
+
+    public void HideItemAnywhere(MeshRegistry.ItemType item) {
+        _hidingLocations = FindObjectsOfType<Furniture>();
+
+        List<Furniture> emptyRoomFurni = new List<Furniture>();
+        
+        foreach (Furniture furniture in _hidingLocations) {
+            if (furniture.inventory == MeshRegistry.ItemType.None) {
+                emptyRoomFurni.Add(furniture);
+            }
+        }
+
+        emptyRoomFurni[Random.Range(0, emptyRoomFurni.Count)].inventory = item;
+    }
 }

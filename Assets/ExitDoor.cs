@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public class ExitDoor: MonoBehaviour, IInteractable {
-    public bool interactable { get; }
+    public bool interactable => true;
 
     private BriefcaseHandler _briefcase;
 

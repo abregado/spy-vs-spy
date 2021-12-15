@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: 0
+  myRoom: {fileID: 0}
 --- !u!65 &1781802795509316078
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -252,7 +253,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 97b6bee2cfaad3f47ad711fc1fb89f8d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: cc8f48a75928f3441a27b51bb3649206, type: 2}
+      objectReference: {fileID: 2100000, guid: 57d4f6008196b514081f6bcb2b2e3f6c, type: 2}
     - target: {fileID: 919132149155446097, guid: 97b6bee2cfaad3f47ad711fc1fb89f8d, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Drawers_01

@@ -7,6 +7,7 @@ using UnityEngine;
 public class MouseClickCatcher : MonoBehaviour {
     private RoomCameraSystem _cameraSystem;
     private SpyHandler _spyHandler;
+    private int _interactionLayerMask = 1 << 3;
     
     void Awake() {
         _cameraSystem = FindObjectOfType<RoomCameraSystem>();
@@ -33,13 +34,13 @@ public class MouseClickCatcher : MonoBehaviour {
     }
 
     private void ActivateRayTarget(int playerIndex) {
-        int layerMask = 1 << 3;
+        
         Camera playerCamera = _cameraSystem.GetPlayerCamera(playerIndex);
         Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         GameObject hitMarker = FindObjectOfType<HitMarker>().gameObject;
         
-        if (Physics.Raycast(ray, out hit, 5000f,layerMask)) {
+        if (Physics.Raycast(ray, out hit, 5000f,_interactionLayerMask)) {
             hitMarker.transform.position = hit.point;    
             IInteractable interactable = hit.collider.transform.GetComponent<IInteractable>();
             if (interactable != null) {

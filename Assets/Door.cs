@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : MonoBehaviour, IInteractable {
-    public int roomTarget;
-    private RoomCameraSystem _cameraSystem;
+    public Door doorTarget;
+    public Room myRoom;
 
     public bool interactable => true;
 
     void Awake() {
-        _cameraSystem = FindObjectOfType<RoomCameraSystem>();
+        myRoom = transform.GetComponentInParent<Room>();
     }
     
     public void OnInteract(Spy spy) {
-        _cameraSystem.SwitchCameraToRoom(spy.playerIndex,roomTarget);
-        spy.ChangeRoom(_cameraSystem.editorRooms[roomTarget]);
+        spy.GoToDoor(doorTarget);
+    }
+
+    public Vector3 GetExitPosition() {
+        return transform.Find("ExitPos").transform.position;
     }
 }
 
