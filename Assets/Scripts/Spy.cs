@@ -58,7 +58,15 @@ public class Spy: MonoBehaviour {
         _isAlive = false;
         _hasMadeInput = false;
         SetVisible(false);
-        _trapDeathParticles.Stop();
+        if (_trapDeathParticles != null) {
+            _trapDeathParticles.Stop();
+        }
+    }
+
+    private void Explode() {
+        if (_trapDeathParticles != null) {
+            _trapDeathParticles.Play();
+        }
     }
     
     public void SetInventoryMesh() {
@@ -221,7 +229,7 @@ public class Spy: MonoBehaviour {
         _isAlive = false;
         SetVisible(false);
         StartCoroutine(nameof(ChangeCameraToDeathRoom));
-        _trapDeathParticles.Play();
+        Explode();
         _collider.enabled = false;
         
         if (currentRoom.HasAnyFurnitureEmpty()) {
@@ -240,7 +248,7 @@ public class Spy: MonoBehaviour {
         _isAlive = false;
         SetVisible(false);
         StartCoroutine(nameof(ChangeCameraToDeathRoom));
-        _trapDeathParticles.Play();
+        Explode();
 
         if (inventory != MeshRegistry.ItemType.None && spy.inventory == MeshRegistry.ItemType.None) {
             spy.inventory = inventory;
