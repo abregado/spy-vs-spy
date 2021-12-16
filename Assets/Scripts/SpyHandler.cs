@@ -11,7 +11,7 @@
         void Awake() {
             
         }
-
+        
         public Room GetEmptyRoomForRespawn() {
             List<Room> rooms = FindObjectsOfType<Room>().ToList();
             List<Room> respawnRooms = new List<Room>();
@@ -33,4 +33,12 @@
             return FindObjectOfType<RoomCameraSystem>().rooms[2];
         }
 
+        public void KillAllSpiesExcept(int playerIndex) {
+            for (int i = 0; i < spies.Length; i++) {
+                if (i != playerIndex) {
+                    Spy spy = spies[i];
+                    spy.KillByWin();
+                }
+            }
+        }
     }

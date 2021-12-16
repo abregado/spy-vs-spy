@@ -57,7 +57,9 @@ public class RoomCameraSystem : MonoBehaviour {
         }
     }
 
-    
+    public Room GetWinRoom() {
+        return roomParent.GetChild(2).GetComponent<Room>();
+    }
 
     public void SetAllCameraToZero(int playerIndex) {
         foreach (Room room in rooms) {

@@ -14,5 +14,6 @@ public class ExitDoor: MonoBehaviour, IInteractable {
         if (spy.inventory == MeshRegistry.ItemType.Briefcase && _briefcase.IsComplete()) {
             Debug.Log("You Win!");
         }
+        spy.GotoWinRoom();
     }
 }

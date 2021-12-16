@@ -33,7 +33,7 @@ public class Spy: MonoBehaviour {
     private int _interactionLayerMask = 1 << 3;
 
     private bool _isAlive;
-    private bool _isPlaying;
+    public bool isPlaying;
     private bool _hasMadeInput;
     private float _respawnTimer;
     private const float RESPAWN_TIME = 30f;
@@ -54,7 +54,7 @@ public class Spy: MonoBehaviour {
     
     void Start() {
         SetInventoryMesh();
-        _isPlaying = false;
+        isPlaying = false;
         _isAlive = false;
         _hasMadeInput = false;
         SetVisible(false);
@@ -81,13 +81,13 @@ public class Spy: MonoBehaviour {
     }
     
     void Update () {
-        if (_isAlive == false && _isPlaying == false && _hasMadeInput) {
+        if (_isAlive == false && isPlaying == false && _hasMadeInput) {
             Respawn();
-            _isPlaying = true;
+            isPlaying = true;
             return;
         }
         
-        if (_isPlaying && _isAlive == false && Time.time > _respawnTimer) {
+        if (isPlaying && _isAlive == false && Time.time > _respawnTimer) {
             Respawn();
             return;
         }
@@ -95,7 +95,7 @@ public class Spy: MonoBehaviour {
         GetInput();
         ProcessInput();    
         
-        if (_isAlive && _isPlaying) {
+        if (_isAlive && isPlaying) {
             if (_isTeleporting == false) {
                 ProcessMovement();
             }
@@ -224,6 +224,15 @@ public class Spy: MonoBehaviour {
         return closest;
     }
 
+    public void KillByWin() {
+        _isAlive = false;
+        isPlaying = false;
+        SetVisible(false);
+        StartCoroutine(nameof(ChangeCameraToDeathRoom));
+        Explode();
+        _collider.enabled = false;
+    }
+    
     public void KillByTrap(Room room) {
         _respawnTimer = Time.time + RESPAWN_TIME;
         _isAlive = false;
@@ -232,8 +241,8 @@ public class Spy: MonoBehaviour {
         Explode();
         _collider.enabled = false;
         
-        if (currentRoom.HasAnyFurnitureEmpty()) {
-            currentRoom.HideItem(inventory);
+        if (room.HasAnyFurnitureEmpty()) {
+            room.HideItem(inventory);
             inventory = MeshRegistry.ItemType.None;
         }
         else {
@@ -268,7 +277,22 @@ public class Spy: MonoBehaviour {
 
     private IEnumerator ChangeCameraToDeathRoom() {
         yield return new WaitForSeconds(3);
-        _cameraSystem.SwitchCameraToRoom(playerIndex,0);
+        _cameraSystem.SwitchCameraToRoom(playerIndex,1);
+    }
+
+    public void GotoWinRoom() {
+        Room exitRoom = _cameraSystem.GetWinRoom();
+
+        cc.enabled = false;
+        transform.position = exitRoom.GetWaypointPosition(playerIndex);
+        cc.enabled = true;
+
+        currentRoom = exitRoom;
+        _cameraSystem.SwitchCameraToRoom(playerIndex,2);
+        SetVisible(true);
+        _isAlive = true;
+        isPlaying = false;
+        _handler.KillAllSpiesExcept(playerIndex);
     }
 
     private void Respawn() {
