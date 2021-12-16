@@ -13,9 +13,14 @@ public class ExitDoor: MonoBehaviour, IInteractable {
     }
     
     public void OnInteract(Spy spy) {
-        if (spy.inventory == G.ItemType.Briefcase && _briefcase.IsComplete()) {
+        if (unlocked && spy.inventory == G.ItemType.Briefcase && _briefcase.IsComplete()) {
             Debug.Log("You Win!");
             spy.GotoWinRoom();
         }
+    }
+
+    public void SetUnlocked() {
+        unlocked = true;
+        transform.Find("Blinds").gameObject.SetActive(false);
     }
 }

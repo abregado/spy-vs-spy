@@ -905,13 +905,14 @@ MonoBehaviour:
   gridHeight: 4
   cellSize: 10
   offset: {x: 0, y: 0, z: 0}
-  exitCount: 0
+  exitCount: 4
   extraFurnitureCount: 0
   roomParent: {fileID: 1619662221}
   roomPrefab: {fileID: 3518934948487414389, guid: ce548dd7ec442d545aa6005d92cc1e2f, type: 3}
   doorPrefab: {fileID: 8643294121828397157, guid: ba254add4979b264882579eb9335b1f8, type: 3}
   doorSouthPrefab: {fileID: 8643294121828397157, guid: bebe060045aa04941a17bffdd617ac12, type: 3}
   windoofPrefab: {fileID: 575659083884294885, guid: 00e2cd926d5b14846ad020518e24c670, type: 3}
+  exitDoors: []
 --- !u!114 &556905230
 MonoBehaviour:
   m_ObjectHideFlags: 0

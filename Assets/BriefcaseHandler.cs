@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BriefcaseHandler : MonoBehaviour {
     public G.ItemType[] slotConfig;
     public bool[] slotStates;
+
+    private bool _completeAndUnlocked;
 
     private BriefcaseUI _briefcaseUI;
 
@@ -13,7 +16,7 @@ public class BriefcaseHandler : MonoBehaviour {
         slotStates = new bool[slotConfig.Length];
         _briefcaseUI = FindObjectOfType<BriefcaseUI>();
         _briefcaseUI.Init();
-    }
+        }
 
     public bool CheckNeedsItem(G.ItemType item) {
         for (int i = 0; i < slotStates.Length; i++) {
@@ -34,7 +37,19 @@ public class BriefcaseHandler : MonoBehaviour {
             }
         }
 
+        if (IsComplete() && _completeAndUnlocked == false) {
+            SetOneExitUnlocked();
+        }
+        
         return false;
+    }
+
+    public void SetOneExitUnlocked() {
+        
+        ExitDoor[] exitDoors = FindObjectsOfType<ExitDoor>();
+        
+        exitDoors[Random.Range(0,exitDoors.Length)].SetUnlocked();
+        _completeAndUnlocked = true;
     }
 
     public bool IsComplete() {
