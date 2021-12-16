@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BriefcaseHandler : MonoBehaviour {
-    public MeshRegistry.ItemType[] slotConfig;
+    public G.ItemType[] slotConfig;
     public bool[] slotStates;
 
     private BriefcaseUI _briefcaseUI;
@@ -20,7 +20,7 @@ public class BriefcaseHandler : MonoBehaviour {
         // }
     }
 
-    public bool CheckNeedsItem(MeshRegistry.ItemType item) {
+    public bool CheckNeedsItem(G.ItemType item) {
         for (int i = 0; i < slotStates.Length; i++) {
             if (slotConfig[i] == item && slotStates[i] == false) {
                 return true;
@@ -30,7 +30,7 @@ public class BriefcaseHandler : MonoBehaviour {
         return false;
     }
 
-    public bool PutInItem(MeshRegistry.ItemType item) {
+    public bool PutInItem(G.ItemType item) {
         for (int i = 0; i < slotStates.Length; i++) {
             if (slotConfig[i] == item && slotStates[i] == false) {
                 slotStates[i] = true;

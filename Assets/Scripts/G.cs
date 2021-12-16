@@ -15,5 +15,25 @@ public static class G {
         SouthWest,
         NorthWest,
     }
+    
+    public enum ItemType {
+        None,
+        Briefcase,
+        Rope,
+        Disguise,
+        Money,
+        Bomb,
+    }
+
+    public enum FurnitureTypes {
+        None,
+        Cabinet,
+        Desk,
+        Drawer,
+        Rug,
+        Lamp,
+        TrashCan,
+        WallSafe
+    }
 
 }

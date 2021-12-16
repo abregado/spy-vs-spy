@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 public class Spy: MonoBehaviour {
     public int playerIndex;
-    public MeshRegistry.ItemType inventory;
+    public G.ItemType inventory;
     public Room currentRoom;
 
     public GameObject _stabPrefab;
@@ -309,11 +309,11 @@ public class Spy: MonoBehaviour {
         
         if (room.HasAnyFurnitureEmpty()) {
             room.HideItem(inventory);
-            inventory = MeshRegistry.ItemType.None;
+            inventory = G.ItemType.None;
         }
         else {
             _itemHider.HideItemAnywhere(inventory);
-            inventory = MeshRegistry.ItemType.None;
+            inventory = G.ItemType.None;
         }
         
     }
@@ -325,18 +325,18 @@ public class Spy: MonoBehaviour {
         StartCoroutine(nameof(ChangeCameraToDeathRoom));
         Explode();
 
-        if (inventory != MeshRegistry.ItemType.None && spy.inventory == MeshRegistry.ItemType.None) {
+        if (inventory != G.ItemType.None && spy.inventory == G.ItemType.None) {
             spy.inventory = inventory;
-            inventory = MeshRegistry.ItemType.None;
+            inventory = G.ItemType.None;
         }
         else {
             if (currentRoom.HasAnyFurnitureEmpty()) {
                 currentRoom.HideItem(inventory);
-                inventory = MeshRegistry.ItemType.None;
+                inventory = G.ItemType.None;
             }
             else {
                 _itemHider.HideItemAnywhere(inventory);
-                inventory = MeshRegistry.ItemType.None;
+                inventory = G.ItemType.None;
             }
         }
     }

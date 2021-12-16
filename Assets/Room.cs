@@ -24,13 +24,13 @@ public class Room : MonoBehaviour {
         return _waypoints[playerIndex].transform.position;
     }
 
-    public bool HideItem(MeshRegistry.ItemType item) {
+    public bool HideItem(G.ItemType item) {
         Furniture[] roomFurniture = GetComponentsInChildren<Furniture>();
 
         List<Furniture> emptyRoomFurni = new List<Furniture>();
         
         foreach (Furniture furniture in roomFurniture) {
-            if (furniture.inventory == MeshRegistry.ItemType.None) {
+            if (furniture.inventory == G.ItemType.None) {
                 emptyRoomFurni.Add(furniture);
             }
         }
@@ -47,7 +47,7 @@ public class Room : MonoBehaviour {
         Furniture[] roomFurniture = GetComponentsInChildren<Furniture>();
 
         foreach (Furniture furni in roomFurniture) {
-            if (furni.inventory != MeshRegistry.ItemType.None) {
+            if (furni.inventory != G.ItemType.None) {
                 return true;
             }
         }
@@ -59,7 +59,7 @@ public class Room : MonoBehaviour {
         Furniture[] roomFurniture = GetComponentsInChildren<Furniture>();
 
         foreach (Furniture furni in roomFurniture) {
-            if (furni.inventory == MeshRegistry.ItemType.None) {
+            if (furni.inventory == G.ItemType.None) {
                 return true;
             }
         }

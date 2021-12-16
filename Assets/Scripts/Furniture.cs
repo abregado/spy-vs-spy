@@ -7,7 +7,7 @@ public class Furniture: MonoBehaviour, IInteractable, ICanBeTrapped {
 
     public bool isTrapped;
 
-    public MeshRegistry.ItemType inventory;
+    public G.ItemType inventory;
     public Room myRoom;
 
     private DOTweenAnimation _animation;
@@ -26,9 +26,9 @@ public class Furniture: MonoBehaviour, IInteractable, ICanBeTrapped {
             return;
         }
         
-        if (spy.inventory == MeshRegistry.ItemType.Briefcase && (inventory == MeshRegistry.ItemType.None | inventory == MeshRegistry.ItemType.Briefcase) == false && _briefcase.CheckNeedsItem(inventory)) {
+        if (spy.inventory == G.ItemType.Briefcase && (inventory == G.ItemType.None | inventory == G.ItemType.Briefcase) == false && _briefcase.CheckNeedsItem(inventory)) {
             _briefcase.PutInItem(inventory);
-            inventory = MeshRegistry.ItemType.None;
+            inventory = G.ItemType.None;
         }
         else {
             (inventory, spy.inventory) = (spy.inventory, inventory);    

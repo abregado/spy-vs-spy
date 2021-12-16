@@ -6,28 +6,33 @@ using UnityEngine;
 
 public class MeshRegistry : MonoBehaviour {
     public Mesh[] itemMeshes;
-    private Dictionary<ItemType, Mesh> _items;
+    private Dictionary<G.ItemType, Mesh> _items;
+    public GameObject[] furniturePrefabs;
+    private Dictionary<G.FurnitureTypes, GameObject> _furniture;
 
-    public enum ItemType {
-        None,
-        Briefcase,
-        Rope,
-        Disguise,
-        Money,
-        Bomb,
-    }
+    
 
     void Awake() {
-        _items = new Dictionary<ItemType, Mesh>();
-
+        _items = new Dictionary<G.ItemType, Mesh>();
         for (int i = 1; i < itemMeshes.Length+1; i++) {
-            _items.Add((ItemType) i,itemMeshes[i-1]);
+            _items.Add((G.ItemType) i,itemMeshes[i-1]);
+        }
+
+        _furniture = new Dictionary<G.FurnitureTypes, GameObject>();
+        for (int i = 1; i < furniturePrefabs.Length; i++) {
+            _furniture.Add((G.FurnitureTypes) i, furniturePrefabs[i-1]);
         }
     }
-    
-    
 
-    public Mesh GetMesh(ItemType itemType) {
+    public GameObject GetFurniturePrefab(G.FurnitureTypes type) {
+        if (_furniture.ContainsKey(type)) {
+            return _furniture[type];
+        }
+        
+        return null;
+    }
+
+    public Mesh GetMesh(G.ItemType itemType) {
         if (_items.ContainsKey(itemType)) {
             return _items[itemType];
         }
