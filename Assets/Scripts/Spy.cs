@@ -19,14 +19,10 @@ public class Spy: MonoBehaviour {
     private ParticleSystem _spyDeathParticles;
 
     public int healthPoints;
-    private const int MaxHealth = 30;
-    private const float AttackMoveSpeed = 1.0f;
-    private const float DamageMoveSpeed = 1.0f;
     private float currentMoveSpeed = 3f;
     private float speedResetTimer;
     
     //Movement Stuff
-    [FormerlySerializedAs("moveSpeed")] public float maxMoveSpeed = 3.0f;
     private Player player; // The Rewired Player
     private CharacterController cc;
     private Vector3 _moveVector;
@@ -101,8 +97,8 @@ public class Spy: MonoBehaviour {
     }
     
     void Update () {
-        if (currentMoveSpeed < maxMoveSpeed && Time.time > speedResetTimer) {
-            currentMoveSpeed = maxMoveSpeed;
+        if (currentMoveSpeed < G.MAX_MOVE_SPEED && Time.time > speedResetTimer) {
+            currentMoveSpeed = G.MAX_MOVE_SPEED;
         }
         
         if (isAlive == false && isPlaying == false && _hasMadeInput) {
@@ -216,8 +212,8 @@ public class Spy: MonoBehaviour {
             //SlashAnimation(transform.position+(transform.forward*0.5f)+Vector3.up);
         }
 
-        currentMoveSpeed = AttackMoveSpeed;
-        speedResetTimer = Time.time + 0.5f;
+        currentMoveSpeed = G.ATTACK_MOVE_SPEED;
+        speedResetTimer = Time.time + G.SPEED_RESET_TIME;
     }
 
     public void DamageTarget(Spy spy) {
@@ -243,8 +239,8 @@ public class Spy: MonoBehaviour {
             KillBySpy(attacker);
         }
 
-        currentMoveSpeed = DamageMoveSpeed;
-        speedResetTimer = Time.time + 1f;
+        currentMoveSpeed = G.DAMAGED_MOVE_SPEED;
+        speedResetTimer = Time.time + (G.SPEED_RESET_TIME/2f);
     }
     
     public Spy GetClosestOtherSpy() {
@@ -368,8 +364,8 @@ public class Spy: MonoBehaviour {
     }
 
     private IEnumerator ChangeCameraToDeathRoom() {
-        yield return new WaitForSeconds(G.RESPAWN_TIME/2f);
-        _cameraSystem.SwitchCameraToRoom(playerIndex,1);
+        yield return new WaitForSeconds(G.TIME_BEFORE_DEATH_ROOM_CHANGE);
+        _cameraSystem.SwitchCameraToRoom(playerIndex,_cameraSystem.GetDeathRoom());
     }
 
     public void GotoWinRoom() {
@@ -398,7 +394,7 @@ public class Spy: MonoBehaviour {
         _cameraSystem.SwitchCameraToRoom(playerIndex,currentRoom);
         SetVisible(true);
         isAlive = true;
-        healthPoints = MaxHealth;
+        healthPoints = G.MAX_HEALTH;
         SetInventoryMesh();
     }
 
