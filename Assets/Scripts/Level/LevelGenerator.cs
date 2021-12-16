@@ -5,6 +5,8 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour {
+    private GameManager _gameManager;
+    
     public int roomCount;
     public int gridWith;
     public int gridHeight;
@@ -22,9 +24,14 @@ public class LevelGenerator : MonoBehaviour {
     
     private Grid<RoomTile> grid;
     private List<Room> rooms = new List<Room>();
+    private List<Furniture> placeableFurniture = new List<Furniture>();
 
     public List<ExitDoor> exitDoors = new List<ExitDoor>();
 
+    public void Init(GameManager gameManager) {
+        _gameManager = gameManager;
+    }
+    
     public void BuildMap() {
         ClearLevel();
         if (roomCount > gridWith * gridHeight) {
@@ -60,9 +67,26 @@ public class LevelGenerator : MonoBehaviour {
     private void PlaceFurniture() {
         foreach (Room room in rooms) {
             if (room.doors.Count < 2) {
-                
+                Transform spawn = GetRandomSpawnPointForFurniture(room);
+                GameObject prefab = GetRandomPlaceableFurniture();
+                GameObject obj = Instantiate(prefab, spawn);
+                placeableFurniture.Add(obj.GetComponent<Furniture>());
             }
         }
+
+        for (int i = 0; i < extraFurnitureCount; i++) {
+            
+        }
+    }
+
+    private GameObject GetRandomPlaceableFurniture() {
+        PickCandidate:
+        GameObject candidate = _gameManager.meshReg.GetRandomFurniture();
+        if (candidate.GetComponent<Furniture>() == null) {
+            goto PickCandidate;
+        }
+
+        return candidate;
     }
 
     private void SpawnRooms() {
@@ -116,7 +140,7 @@ public class LevelGenerator : MonoBehaviour {
         possibleExits.Shuffle();
 
         for (int i = 0; i < exitCount; i++) {
-            Transform spawn = GetSpawnpointForExit(possibleExits[i].Item1, possibleExits[i].Item2);
+            Transform spawn = GetSpawnPointForExit(possibleExits[i].Item1, possibleExits[i].Item2);
             ExitDoor exit = SpawnExit(spawn, possibleExits[i].Item1);
             exitDoors.Add(exit);
         }
@@ -217,13 +241,31 @@ public class LevelGenerator : MonoBehaviour {
         return door.GetComponent<Door>();
     }
 
-    private Transform GetRandomSpawnpositionForFurniture(Room room) {
+    private Transform GetRandomSpawnPointForFurniture(Room room) {
         Transform spawnParent = room.transform.Find("Spawnpoints").transform;
+        List<Transform> freeSpawns = new List<Transform>();
 
-        return null;
+        for (int i = 0; i < spawnParent.childCount; i++) {
+            Transform current = spawnParent.GetChild(i);
+            if (current.name == "Center") {
+                continue;
+            }
+
+            if (current.childCount > 0) {
+                continue;
+            }
+            
+            freeSpawns.Add(current);
+            freeSpawns.Shuffle();
+        }
+
+        if (freeSpawns.Count == 0) {
+            return null;
+        }
+        return freeSpawns[0];
     }
 
-    private Transform GetSpawnpointForExit(G.GridDir dir, Room room) {
+    private Transform GetSpawnPointForExit(G.GridDir dir, Room room) {
         Transform spawns = room.transform.Find("Spawnpoints").transform;
         
         switch (dir) {

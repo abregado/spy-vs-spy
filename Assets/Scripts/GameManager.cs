@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     private void Start() {
         meshReg.Init();
         briefCase.Init();
+        levelGen.Init(this);
         levelGen.BuildMap();
         roomCameraSystem.Init();
         itemHider.Init();
