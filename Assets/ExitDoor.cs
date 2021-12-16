@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class ExitDoor: MonoBehaviour, IInteractable {
     public bool interactable => true;
+    public bool correctExit;
+    public bool unlocked;
 
     private BriefcaseHandler _briefcase;
 

@@ -350,7 +350,6 @@ public class Spy: MonoBehaviour {
         if (inventory != G.ItemType.None && killer.inventory == G.ItemType.None) {
             killer.inventory = inventory;
             inventory = G.ItemType.None;
-            SetInventoryMesh();
             killer.SetInventoryMesh();
         }
         else {
@@ -363,6 +362,7 @@ public class Spy: MonoBehaviour {
                 inventory = G.ItemType.None;
             }
         }
+        SetInventoryMesh();
     }
 
     private IEnumerator ChangeCameraToDeathRoom() {
