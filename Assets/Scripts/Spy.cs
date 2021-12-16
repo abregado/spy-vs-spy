@@ -152,6 +152,7 @@ public class Spy: MonoBehaviour {
             Vector3 actualMoveVector = new Vector3(frameVector.x, 0f, frameVector.y);
             cc.Move(actualMoveVector);
             transform.LookAt(transform.position+actualMoveVector);
+            transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
         }
     }
 
