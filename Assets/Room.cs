@@ -8,6 +8,7 @@ public class Room : MonoBehaviour {
 
     private CinemachineVirtualCamera[] _cameras;
     private Waypoint[] _waypoints;
+    public RoomTile myTile;
 
     // Start is called before the first frame update
     void Awake() {

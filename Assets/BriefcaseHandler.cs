@@ -15,9 +15,9 @@ public class BriefcaseHandler : MonoBehaviour {
     }
 
     private void Start() {
-        for (int i = 0; i < slotStates.Length; i++) {
-            _briefcaseUI.UpdateImageVisiblity(i,false);
-        }
+        // for (int i = 0; i < slotStates.Length; i++) {
+        //     _briefcaseUI.UpdateImageVisiblity(i,false);
+        // }
     }
 
     public bool CheckNeedsItem(MeshRegistry.ItemType item) {

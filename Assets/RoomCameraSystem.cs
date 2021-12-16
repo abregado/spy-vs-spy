@@ -27,7 +27,7 @@ public class RoomCameraSystem : MonoBehaviour {
         }
         
         for (int p = 0; p < 4; p++) {
-            SwitchCameraToRoom(p,0);   
+            SwitchCameraToRoom(p,0);    
         }
         
     }
