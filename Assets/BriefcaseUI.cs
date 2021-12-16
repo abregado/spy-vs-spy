@@ -8,12 +8,8 @@ public class BriefcaseUI : MonoBehaviour {
     public Image[] itemImage;
 
     private bool _visible;
-    
-    private void Awake() {
-        
-    }
 
-    private void Start() {
+    public void Init() {
         for (int i = 0; i < itemImage.Length; i++) {
             UpdateImageVisiblity(i,false);
         }

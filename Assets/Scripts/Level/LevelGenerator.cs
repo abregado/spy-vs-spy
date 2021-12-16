@@ -18,9 +18,10 @@ public class LevelGenerator : MonoBehaviour {
     public GameObject windoofPrefab;
     
     private Grid<RoomTile> grid;
-    private List<GameObject> rooms;
+    private List<GameObject> rooms = new List<GameObject>();
 
-    private void Start() {
+    public void BuildMap() {
+        ClearLevel();
         if (roomCount > gridWith * gridHeight) {
             Debug.LogError("you cant fit more then " + gridWith * gridHeight + " rooms in your grid");
         }

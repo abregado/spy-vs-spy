@@ -10,7 +10,7 @@ public class ItemHider : MonoBehaviour {
     public G.ItemType[] objectsToHide;
     private Furniture[] _hidingLocations;
     
-    private void Awake() {
+    public void Init() {
         _hidingLocations = FindObjectsOfType<Furniture>();
 
         foreach (Furniture location in _hidingLocations) {

@@ -9,15 +9,10 @@ public class BriefcaseHandler : MonoBehaviour {
 
     private BriefcaseUI _briefcaseUI;
 
-    void Awake() {
+    public void Init() {
         slotStates = new bool[slotConfig.Length];
         _briefcaseUI = FindObjectOfType<BriefcaseUI>();
-    }
-
-    private void Start() {
-        // for (int i = 0; i < slotStates.Length; i++) {
-        //     _briefcaseUI.UpdateImageVisiblity(i,false);
-        // }
+        _briefcaseUI.Init();
     }
 
     public bool CheckNeedsItem(G.ItemType item) {

@@ -56,8 +56,8 @@ public class Spy: MonoBehaviour {
         _meshRegistry = FindObjectOfType<MeshRegistry>();
         _handler = FindObjectOfType<SpyHandler>();
         _collider = GetComponent<Collider>();
-        _trapDeathParticles = transform.Find("DomeNukeRed").GetComponent<ParticleSystem>();
-        _spyDeathParticles = transform.Find("BloodBoneExplosionBig").GetComponent<ParticleSystem>();
+        _trapDeathParticles = transform.Find("DomeNukeRed")?.GetComponent<ParticleSystem>();
+        _spyDeathParticles = transform.Find("BloodBoneExplosionBig")?.GetComponent<ParticleSystem>();
 
         player = ReInput.players.GetPlayer(playerIndex);
         cc = GetComponent<CharacterController>();
