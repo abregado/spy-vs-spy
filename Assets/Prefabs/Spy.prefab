@@ -133,6 +133,7 @@ MonoBehaviour:
   inventory: 0
   currentRoom: {fileID: 0}
   _stabPrefab: {fileID: 8123500623578600021, guid: d7456e1f6e5242540b63b9042a2e3915, type: 3}
+  healthPoints: 0
   moveSpeed: 3
   isAlive: 0
   isPlaying: 0
@@ -367,11 +368,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4790745948636792, guid: 14c970e5088917041882baa0106b1400, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4790745948636792, guid: 14c970e5088917041882baa0106b1400, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.00000008940697
       objectReference: {fileID: 0}
     - target: {fileID: 4790745948636792, guid: 14c970e5088917041882baa0106b1400, type: 3}
       propertyPath: m_LocalRotation.w
@@ -412,6 +413,34 @@ PrefabInstance:
     - target: {fileID: 198582708741191912, guid: 14c970e5088917041882baa0106b1400, type: 3}
       propertyPath: moveWithTransform
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198796437013743048, guid: 14c970e5088917041882baa0106b1400, type: 3}
+      propertyPath: ShapeModule.type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 198796437013743048, guid: 14c970e5088917041882baa0106b1400, type: 3}
+      propertyPath: EmissionModule.m_BurstCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198796437013743048, guid: 14c970e5088917041882baa0106b1400, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198796437013743048, guid: 14c970e5088917041882baa0106b1400, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198796437013743048, guid: 14c970e5088917041882baa0106b1400, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 198796437013743048, guid: 14c970e5088917041882baa0106b1400, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198796437013743048, guid: 14c970e5088917041882baa0106b1400, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 199211979062109334, guid: 14c970e5088917041882baa0106b1400, type: 3}
       propertyPath: m_Materials.Array.size

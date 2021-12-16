@@ -20,6 +20,10 @@ public class Spy: MonoBehaviour {
 
     public int healthPoints;
     private const int MaxHealth = 30;
+    private const float AttackMoveSpeed = 1.0f;
+    private const float DamageMoveSpeed = 1.0f;
+    private float currentMoveSpeed = 3f;
+    private float speedResetTimer;
     
     //Movement Stuff
     public float moveSpeed = 3.0f;
@@ -98,6 +102,10 @@ public class Spy: MonoBehaviour {
     }
     
     void Update () {
+        if (currentMoveSpeed < moveSpeed && Time.time > speedResetTimer) {
+            currentMoveSpeed = moveSpeed;
+        }
+        
         if (isAlive == false && isPlaying == false && _hasMadeInput) {
             Respawn();
             isPlaying = true;
@@ -208,25 +216,39 @@ public class Spy: MonoBehaviour {
         else {
             //SlashAnimation(transform.position+(transform.forward*0.5f)+Vector3.up);
         }
+
+        currentMoveSpeed = AttackMoveSpeed;
+        speedResetTimer = Time.time + 2f;
     }
 
     public void DamageTarget(Spy spy) {
         Vector3 middlePoint = (spy.transform.position - transform.position)/2f + transform.position + Vector3.up ;
         SlashAnimation(middlePoint);
-        spy.Hurt();
+        int damage = 2;
+        if (inventory == MeshRegistry.ItemType.None) {
+            damage = 3;
+        }
+        spy.Hurt(damage,this);
     }
 
     private void SlashAnimation(Vector3 position) {
         Instantiate(_stabPrefab, position,Quaternion.identity,transform);
     }
 
-    public void Hurt() {
+    public void Hurt(int damage,Spy attacker) {
         Debug.Log("spy injured");
+        healthPoints -= damage;
+        if (healthPoints <= 1) {
+            KillBySpy(attacker);
+        }
+
+        currentMoveSpeed = DamageMoveSpeed;
+        speedResetTimer = Time.time + 1f;
     }
     
     public Spy GetClosestOtherSpy() {
         Vector3 frontPos = transform.position + (transform.forward * 0.25f);
-        Collider[] inRange = Physics.OverlapSphere(frontPos, 0.5f,_spyLayerMask);
+        Collider[] inRange = Physics.OverlapSphere(frontPos, 0.75f,_spyLayerMask);
         
         Spy closest = null;
 
@@ -323,7 +345,7 @@ public class Spy: MonoBehaviour {
         isAlive = false;
         SetVisible(false);
         StartCoroutine(nameof(ChangeCameraToDeathRoom));
-        Explode();
+        BloodExplode();
 
         if (inventory != G.ItemType.None && spy.inventory == G.ItemType.None) {
             spy.inventory = inventory;

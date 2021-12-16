@@ -12,10 +12,12 @@ public class Furniture: MonoBehaviour, IInteractable, ICanBeTrapped {
 
     private DOTweenAnimation _animation;
     private BriefcaseHandler _briefcase;
+    private BriefcaseUI _ui;
 
     void Awake() {
         _animation = transform.Find("View").GetComponent<DOTweenAnimation>();
         _briefcase = FindObjectOfType<BriefcaseHandler>();
+        _ui = FindObjectOfType<BriefcaseUI>();
         myRoom = transform.parent.GetComponent<Room>();
     }
     
@@ -31,7 +33,10 @@ public class Furniture: MonoBehaviour, IInteractable, ICanBeTrapped {
             inventory = G.ItemType.None;
         }
         else {
-            (inventory, spy.inventory) = (spy.inventory, inventory);    
+            (inventory, spy.inventory) = (spy.inventory, inventory);
+            if (spy.inventory == MeshRegistry.ItemType.Briefcase) {
+                _ui.SetPanelVisiblity(true);
+            }
         }
         
         spy.SetInventoryMesh();
