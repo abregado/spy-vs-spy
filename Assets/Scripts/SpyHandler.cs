@@ -1,4 +1,5 @@
-﻿    using System.Collections.Generic;
+﻿    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
     using UnityEngine.PlayerLoop;
@@ -6,12 +7,34 @@
 
     public class SpyHandler: MonoBehaviour {
         public Spy[] spies;
+        
+        private float _timeRemaining;
 
+        private TimerUI _timerUI;
+        
         public void Init() {
+            _timerUI = FindObjectOfType<TimerUI>();
+            
             foreach (Spy spy in spies) {
                 spy.Init();
                 spy.StartSpy();
             }
+            
+            ResetTime();
+        }
+
+        private void Update() {
+            if (_timerUI != null && _timeRemaining > 0f) {
+                _timeRemaining -= Time.deltaTime;
+                _timerUI.DisplayTime(_timeRemaining);
+                if (_timeRemaining <= 0f) {
+                    KillAllSpiesExcept(-1);
+                }
+            }
+        }
+
+        public void ResetTime() {
+            _timeRemaining = G.TIME_LIMIT;
         }
 
         public Room GetEmptyRoomForRespawn() {

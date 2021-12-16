@@ -13,6 +13,8 @@ public static class G {
     public const float MAX_MOVE_SPEED = 3.0f;
     public const float SPEED_RESET_TIME = 0.5f;
 
+    public const float TIME_LIMIT = 300f;
+
     public enum GridDir {
         None,
         North,

@@ -234,7 +234,6 @@ public class Spy: MonoBehaviour {
     }
 
     public void Hurt(int damage,Spy attacker) {
-        Debug.Log("spy injured");
         healthPoints -= damage;
         if (healthPoints <= 1) {
             KillBySpy(attacker);
