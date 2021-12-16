@@ -231,7 +231,9 @@ public class Spy: MonoBehaviour {
     }
 
     private void SlashAnimation(Vector3 position) {
-        Instantiate(_stabPrefab, position,Quaternion.identity,transform);
+        if (_stabPrefab != null) {
+            Instantiate(_stabPrefab, position, Quaternion.identity, transform);
+        }
     }
 
     public void Hurt(int damage,Spy attacker) {
