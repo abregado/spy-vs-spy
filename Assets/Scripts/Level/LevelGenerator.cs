@@ -11,6 +11,9 @@ public class LevelGenerator : MonoBehaviour {
     public int cellSize;
     public Vector3 offset;
 
+    public int exitCount;
+    public int extraFurnitureCount;
+
     public Transform roomParent;
     public GameObject roomPrefab;
     public GameObject doorPrefab;
@@ -18,7 +21,7 @@ public class LevelGenerator : MonoBehaviour {
     public GameObject windoofPrefab;
     
     private Grid<RoomTile> grid;
-    private List<GameObject> rooms = new List<GameObject>();
+    private List<Room> rooms = new List<Room>();
 
     public void BuildMap() {
         ClearLevel();
@@ -31,8 +34,8 @@ public class LevelGenerator : MonoBehaviour {
     }
 
     private void ClearLevel() {
-        foreach (GameObject room in rooms) {
-            Destroy(room);
+        foreach (Room room in rooms) {
+            Destroy(room.gameObject);
         }
         rooms.Clear();
         grid = null;
@@ -50,7 +53,7 @@ public class LevelGenerator : MonoBehaviour {
 
     private void SpawnRooms() {
         int roomsSpawned = 0;
-        rooms = new List<GameObject>();
+        rooms = new List<Room>();
         RoomTile currentTile = grid._gridArray[Random.Range(0, gridWith), Random.Range(0, gridHeight)];
 
         RandomRoom:
@@ -73,7 +76,7 @@ public class LevelGenerator : MonoBehaviour {
             Quaternion.identity, roomParent);
         randomNeighbour.room = roomObj.GetComponent<Room>();
         randomNeighbour.room.myTile = randomNeighbour;
-        rooms.Add(roomObj);
+        rooms.Add(roomObj.GetComponent<Room>());
         roomsSpawned++;
         currentTile = randomNeighbour;
         if (roomsSpawned >= roomCount) {
@@ -82,52 +85,55 @@ public class LevelGenerator : MonoBehaviour {
         goto NewNeighbour;
     }
 
+    private void PlaceExits() {
+        foreach (Room room in rooms) {
+            
+        }
+    }
+
     private void PlaceDoors() {
-        foreach (GameObject room in rooms) {
-            Room roomClass = room.GetComponent<Room>();
+        foreach (Room room in rooms) {
             Dictionary<G.GridDir, RoomTile> adjecent =
-                grid.GetAdjacentOrthogonal(roomClass.myTile.gridPosition.x, roomClass.myTile.gridPosition.y);
+                grid.GetAdjacentOrthogonal(room.myTile.gridPosition.x, room.myTile.gridPosition.y);
             foreach (var kvp in adjecent) {
                 if (kvp.Value == default || kvp.Value.room == null) {
                     continue;
                 }
-                Transform spawn = GetRandomSpawnPointForDir(kvp.Key, roomClass);
+                Transform spawn = GetRandomSpawnPointForDir(kvp.Key, room);
                 Door door = SpawnDoor(spawn, kvp.Key);
-                roomClass.doors.Add(kvp.Key, door);
+                room.doors.Add(kvp.Key, door);
             }
         }
 
-        foreach (GameObject room in rooms) {
-            Room roomClass = room.GetComponent<Room>();
-            
-            foreach (KeyValuePair<G.GridDir,Door> kvp in roomClass.doors) {
-                Room adjecent = (grid.GetAdjecentInDir(roomClass.myTile.gridPosition.x,
-                    roomClass.myTile.gridPosition.y, kvp.Key) as RoomTile).room;
+        foreach (Room room in rooms) {
+            foreach (KeyValuePair<G.GridDir,Door> kvp in room.doors) {
+                Room adjecent = (grid.GetAdjecentInDir(room.myTile.gridPosition.x,
+                    room.myTile.gridPosition.y, kvp.Key) as RoomTile).room;
                 
                 switch (kvp.Key) {
                     case G.GridDir.North:
-                        if (!roomClass.doors.ContainsKey(kvp.Key) || !adjecent.doors.ContainsKey(G.GridDir.South)) {
+                        if (!room.doors.ContainsKey(kvp.Key) || !adjecent.doors.ContainsKey(G.GridDir.South)) {
                             Debug.Log("Room " + room.transform + "cant connect Door in Dir " + kvp.Key);
                         }
-                        roomClass.doors[kvp.Key].doorTarget = adjecent.doors[G.GridDir.South];
+                        room.doors[kvp.Key].doorTarget = adjecent.doors[G.GridDir.South];
                         break;
                     case G.GridDir.South:
-                        if (!roomClass.doors.ContainsKey(kvp.Key) || !adjecent.doors.ContainsKey(G.GridDir.North)) {
+                        if (!room.doors.ContainsKey(kvp.Key) || !adjecent.doors.ContainsKey(G.GridDir.North)) {
                             Debug.Log("Room " + room.transform + "cant connect Door in Dir " + kvp.Key);
                         }
-                        roomClass.doors[kvp.Key].doorTarget = adjecent.doors[G.GridDir.North];
+                        room.doors[kvp.Key].doorTarget = adjecent.doors[G.GridDir.North];
                         break;
                     case G.GridDir.West:
-                        if (!roomClass.doors.ContainsKey(kvp.Key) || !adjecent.doors.ContainsKey(G.GridDir.East)) {
+                        if (!room.doors.ContainsKey(kvp.Key) || !adjecent.doors.ContainsKey(G.GridDir.East)) {
                             Debug.Log("Room " + room.transform + "cant connect Door in Dir " + kvp.Key);
                         }
-                        roomClass.doors[kvp.Key].doorTarget = adjecent.doors[G.GridDir.East];
+                        room.doors[kvp.Key].doorTarget = adjecent.doors[G.GridDir.East];
                         break;
                     case G.GridDir.East:
-                        if (!roomClass.doors.ContainsKey(kvp.Key) || !adjecent.doors.ContainsKey(G.GridDir.West)) {
+                        if (!room.doors.ContainsKey(kvp.Key) || !adjecent.doors.ContainsKey(G.GridDir.West)) {
                             Debug.Log("Room " + room.transform + "cant connect Door in Dir " + kvp.Key);
                         }
-                        roomClass.doors[kvp.Key].doorTarget = adjecent.doors[G.GridDir.West];
+                        room.doors[kvp.Key].doorTarget = adjecent.doors[G.GridDir.West];
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

@@ -1,10 +1,18 @@
 ﻿    using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
+    using UnityEngine.PlayerLoop;
     using Random = UnityEngine.Random;
 
     public class SpyHandler: MonoBehaviour {
         public Spy[] spies;
+
+        public void Init() {
+            foreach (Spy spy in spies) {
+                spy.Init();
+                spy.StartSpy();
+            }
+        }
 
         public Room GetEmptyRoomForRespawn() {
             List<Room> rooms = FindObjectsOfType<Room>().ToList();

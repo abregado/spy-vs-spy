@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
     public MeshRegistry meshReg;
     public BriefcaseHandler briefCase;
     public ItemHider itemHider;
+    public SpyHandler spyHandler;
     
     private void Start() {
         meshReg.Init();
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour {
         levelGen.BuildMap();
         roomCameraSystem.Init();
         itemHider.Init();
+        spyHandler.Init();
     }
     
 }

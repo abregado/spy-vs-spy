@@ -14,7 +14,7 @@ public class MeshRegistry : MonoBehaviour {
 
     public void Init() {
         _items = new Dictionary<G.ItemType, Mesh>();
-        for (int i = 1; i < itemMeshes.Length+1; i++) {
+        for (int i = 1; i < itemMeshes.Length; i++) {
             _items.Add((G.ItemType) i,itemMeshes[i-1]);
         }
 

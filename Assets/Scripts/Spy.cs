@@ -44,7 +44,7 @@ public class Spy: MonoBehaviour {
     private bool _hasMadeInput;
     private float _respawnTimer;
 
-    void Awake() {
+    public void Init() {
         _itemHider = FindObjectOfType<ItemHider>();
         _cameraSystem = FindObjectOfType<RoomCameraSystem>();
         _inventoryMesh = transform.Find("Inventory").GetComponent<MeshFilter>();
@@ -59,7 +59,7 @@ public class Spy: MonoBehaviour {
         cc = GetComponent<CharacterController>();
     }
     
-    void Start() {
+    public void StartSpy() {
         SetInventoryMesh();
         isPlaying = false;
         isAlive = false;
