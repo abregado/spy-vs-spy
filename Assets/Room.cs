@@ -8,6 +8,7 @@ public class Room : MonoBehaviour {
 
     private CinemachineVirtualCamera[] _cameras;
     public RoomTile myTile;
+    public Dictionary<G.GridDir, Door> doors = new Dictionary<G.GridDir, Door>();
 
     // Start is called before the first frame update
     void Awake() {

@@ -50,6 +50,21 @@ public class Grid<TGridObject> {
         return default(TGridObject);
     }
 
+    public TGridObject GetAdjecentInDir(int x, int z, G.GridDir dir) {
+        switch (dir) {
+            case G.GridDir.North:
+                return GetGridObject(x, z + 1);
+            case G.GridDir.South:
+                return GetGridObject(x, z - 1);
+            case G.GridDir.West:
+                return GetGridObject(x - 1, z);
+            case G.GridDir.East:
+                return GetGridObject(x + 1, z);
+            default:
+                throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
+        }
+    }
+
     public Dictionary<G.GridDir, TGridObject> GetAdjacentOrthogonal(int x, int z) {
         Dictionary<G.GridDir, TGridObject> objs = new Dictionary<G.GridDir, TGridObject>(4);
         objs[G.GridDir.East] = GetGridObject(x + 1, z);
@@ -97,18 +112,18 @@ public class Grid<TGridObject> {
         return count >= countGoal;
     }
     
-    public Dictionary<G.GridDir, TGridObject> GetAdjacentRing(int x, int z) {
-        Dictionary<G.GridDir, TGridObject> objs = new Dictionary<G.GridDir, TGridObject>(8);
-        objs[G.GridDir.East] = GetGridObject(x + 1, z);
-        objs[G.GridDir.West] = GetGridObject(x - 1, z);
-        objs[G.GridDir.North] = GetGridObject(x, z + 1);
-        objs[G.GridDir.South] = GetGridObject(x, z - 1);
-        objs[G.GridDir.NorthEast] = GetGridObject(x + 1, z + 1);
-        objs[G.GridDir.NorthWest] = GetGridObject(x - 1, z + 1);
-        objs[G.GridDir.SouthEast] = GetGridObject(x + 1, z - 1);
-        objs[G.GridDir.SouthWest] = GetGridObject(x - 1, z - 1);
-        return objs;
-    }
+    // public Dictionary<G.GridDir, TGridObject> GetAdjacentRing(int x, int z) {
+    //     Dictionary<G.GridDir, TGridObject> objs = new Dictionary<G.GridDir, TGridObject>(8);
+    //     objs[G.GridDir.East] = GetGridObject(x + 1, z);
+    //     objs[G.GridDir.West] = GetGridObject(x - 1, z);
+    //     objs[G.GridDir.North] = GetGridObject(x, z + 1);
+    //     objs[G.GridDir.South] = GetGridObject(x, z - 1);
+    //     objs[G.GridDir.NorthEast] = GetGridObject(x + 1, z + 1);
+    //     objs[G.GridDir.NorthWest] = GetGridObject(x - 1, z + 1);
+    //     objs[G.GridDir.SouthEast] = GetGridObject(x + 1, z - 1);
+    //     objs[G.GridDir.SouthWest] = GetGridObject(x - 1, z - 1);
+    //     return objs;
+    // }
     
     public void SetGridObject(Vector3 worldPos, TGridObject obj) {
         int x, z;

@@ -12,23 +12,23 @@ public class RoomCameraSystem : MonoBehaviour {
 
     void Start() {
 
-        if (roomParent == null) {
-            Debug.LogError("You need a roomParent");
-        }
+        // if (roomParent == null) {
+        //     Debug.LogError("You need a roomParent");
+        // }
         
-        if (roomParent.childCount == 0) {
-            Debug.LogError("You need to have at least one Room in the RoomParent");
-        }
+        // if (roomParent.childCount == 0) {
+        //     Debug.LogError("You need to have at least one Room in the RoomParent");
+        // }
 
-        rooms = new Room[roomParent.childCount];
+        // rooms = new Room[roomParent.childCount];
 
-        for (int i = 0; i < roomParent.childCount; i++) {
-            rooms[i] = roomParent.GetChild(i).GetComponent<Room>();
-        }
-        
-        for (int p = 0; p < 4; p++) {
-            SwitchCameraToRoom(p,0);    
-        }
+        // for (int i = 0; i < roomParent.childCount; i++) {
+        //     rooms[i] = roomParent.GetChild(i).GetComponent<Room>();
+        // }
+        //
+        // for (int p = 0; p < 4; p++) {
+        //     SwitchCameraToRoom(p,0);    
+        // }
         
     }
 

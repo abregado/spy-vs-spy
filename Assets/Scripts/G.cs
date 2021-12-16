@@ -12,10 +12,6 @@ public static class G {
         South,
         West,
         East,
-        NorthEast,
-        SouthEast,
-        SouthWest,
-        NorthWest,
     }
     
     public enum ItemType {
