@@ -23,6 +23,8 @@ public class LevelGenerator : MonoBehaviour {
     private Grid<RoomTile> grid;
     private List<Room> rooms = new List<Room>();
 
+    public List<ExitDoor> exitDoors = new List<ExitDoor>();
+
     public void BuildMap() {
         ClearLevel();
         if (roomCount > gridWith * gridHeight) {
@@ -31,6 +33,8 @@ public class LevelGenerator : MonoBehaviour {
         GenerateGrid();
         SpawnRooms();
         PlaceDoors();
+        PlaceExits();
+        PlaceFurniture();
     }
 
     private void ClearLevel() {
@@ -48,6 +52,16 @@ public class LevelGenerator : MonoBehaviour {
             GenerateGrid();
             SpawnRooms();
             PlaceDoors();
+            PlaceExits();
+            PlaceFurniture();
+        }
+    }
+
+    private void PlaceFurniture() {
+        foreach (Room room in rooms) {
+            if (room.doors.Count < 2) {
+                
+            }
         }
     }
 
@@ -86,8 +100,25 @@ public class LevelGenerator : MonoBehaviour {
     }
 
     private void PlaceExits() {
+        List<(G.GridDir, Room)> possibleExits = new List<(G.GridDir, Room)>();
         foreach (Room room in rooms) {
-            
+            if (!room.doors.ContainsKey(G.GridDir.South)) {
+                possibleExits.Add((G.GridDir.South, room));
+            }
+            if (!room.doors.ContainsKey(G.GridDir.East)) {
+                possibleExits.Add((G.GridDir.East, room));
+            }
+            if (!room.doors.ContainsKey(G.GridDir.West)) {
+                possibleExits.Add((G.GridDir.West, room));
+            }
+        }
+        
+        possibleExits.Shuffle();
+
+        for (int i = 0; i < exitCount; i++) {
+            Transform spawn = GetRandomSpawnPointForDir(possibleExits[i].Item1, possibleExits[i].Item2);
+            ExitDoor exit = SpawnExit(spawn, possibleExits[i].Item1);
+            exitDoors.Add(exit);
         }
     }
 
@@ -142,6 +173,28 @@ public class LevelGenerator : MonoBehaviour {
         }
     }
 
+    private ExitDoor SpawnExit(Transform parent, G.GridDir dir) {
+        GameObject door = null;
+        switch (dir) {
+            // case G.GridDir.North:
+            //     door = Instantiate(doorSouthPrefab, parent);
+            //     break;
+            case G.GridDir.South:
+                door = Instantiate(windoofPrefab, parent);
+                break;
+            case G.GridDir.West:
+                door = Instantiate(windoofPrefab, parent);
+                break;
+            case G.GridDir.East:
+                door = Instantiate(windoofPrefab, parent);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
+        }
+
+        return door.GetComponent<ExitDoor>();
+    }
+    
     private Door SpawnDoor(Transform parent, G.GridDir dir) {
         GameObject door = null;
         switch (dir) {
@@ -234,4 +287,6 @@ public class LevelGenerator : MonoBehaviour {
         
         
     }
+    
+   
 }
