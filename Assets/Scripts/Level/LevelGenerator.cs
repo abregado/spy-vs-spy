@@ -116,7 +116,7 @@ public class LevelGenerator : MonoBehaviour {
         possibleExits.Shuffle();
 
         for (int i = 0; i < exitCount; i++) {
-            Transform spawn = GetRandomSpawnPointForDir(possibleExits[i].Item1, possibleExits[i].Item2);
+            Transform spawn = GetSpawnpointForExit(possibleExits[i].Item1, possibleExits[i].Item2);
             ExitDoor exit = SpawnExit(spawn, possibleExits[i].Item1);
             exitDoors.Add(exit);
         }
@@ -215,6 +215,27 @@ public class LevelGenerator : MonoBehaviour {
         }
 
         return door.GetComponent<Door>();
+    }
+
+    private Transform GetRandomSpawnpositionForFurniture(Room room) {
+        Transform spawnParent = room.transform.Find("Spawnpoints").transform;
+
+        return null;
+    }
+
+    private Transform GetSpawnpointForExit(G.GridDir dir, Room room) {
+        Transform spawns = room.transform.Find("Spawnpoints").transform;
+        
+        switch (dir) {
+            case G.GridDir.South:
+                return spawns.Find("Bottom_middle");
+            case G.GridDir.West:
+                return spawns.Find("Left_middle");
+            case G.GridDir.East:
+                return spawns.Find("Right_middle");
+            default:
+                throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
+        }
     }
 
     private Transform GetRandomSpawnPointForDir(G.GridDir dir, Room room) {
