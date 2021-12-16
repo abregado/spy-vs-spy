@@ -9,11 +9,17 @@ public class Spy: MonoBehaviour {
     public MeshRegistry.ItemType inventory;
     public Room currentRoom;
 
+    public GameObject _stabPrefab;
+
     private MeshFilter _inventoryMesh;
     private MeshRenderer _inventoryRenderer;
     private MeshRegistry _meshRegistry;
     private Collider _collider;
     private ParticleSystem _trapDeathParticles;
+    private ParticleSystem _spyDeathParticles;
+
+    public int healthPoints;
+    private const int MaxHealth = 30;
     
     //Movement Stuff
     public float moveSpeed = 3.0f;
@@ -31,8 +37,9 @@ public class Spy: MonoBehaviour {
     private ItemHider _itemHider;
     private SpyHandler _handler;
     private int _interactionLayerMask = 1 << 3;
+    private int _spyLayerMask = 1 << 10;
 
-    private bool _isAlive;
+    public bool isAlive;
     public bool isPlaying;
     private bool _hasMadeInput;
     private float _respawnTimer;
@@ -47,6 +54,7 @@ public class Spy: MonoBehaviour {
         _handler = FindObjectOfType<SpyHandler>();
         _collider = GetComponent<Collider>();
         _trapDeathParticles = transform.Find("DomeNukeRed").GetComponent<ParticleSystem>();
+        _spyDeathParticles = transform.Find("BloodBoneExplosionBig").GetComponent<ParticleSystem>();
 
         player = ReInput.players.GetPlayer(playerIndex);
         cc = GetComponent<CharacterController>();
@@ -55,17 +63,26 @@ public class Spy: MonoBehaviour {
     void Start() {
         SetInventoryMesh();
         isPlaying = false;
-        _isAlive = false;
+        isAlive = false;
         _hasMadeInput = false;
         SetVisible(false);
         if (_trapDeathParticles != null) {
             _trapDeathParticles.Stop();
+        }
+        if (_spyDeathParticles != null) {
+            _spyDeathParticles.Stop();
         }
     }
 
     private void Explode() {
         if (_trapDeathParticles != null) {
             _trapDeathParticles.Play();
+        }
+    }
+
+    private void BloodExplode() {
+        if (_spyDeathParticles != null) {
+            _spyDeathParticles.Play();
         }
     }
     
@@ -81,13 +98,13 @@ public class Spy: MonoBehaviour {
     }
     
     void Update () {
-        if (_isAlive == false && isPlaying == false && _hasMadeInput) {
+        if (isAlive == false && isPlaying == false && _hasMadeInput) {
             Respawn();
             isPlaying = true;
             return;
         }
         
-        if (isPlaying && _isAlive == false && Time.time > _respawnTimer) {
+        if (isPlaying && isAlive == false && Time.time > _respawnTimer) {
             Respawn();
             return;
         }
@@ -95,7 +112,7 @@ public class Spy: MonoBehaviour {
         GetInput();
         ProcessInput();    
         
-        if (_isAlive && isPlaying) {
+        if (isAlive && isPlaying) {
             if (_isTeleporting == false) {
                 ProcessMovement();
             }
@@ -139,7 +156,7 @@ public class Spy: MonoBehaviour {
         // Debug.Log("-------------");
         if (_interact) {
             _hasMadeInput = true;
-            if (_isAlive) {
+            if (isAlive) {
                 Interact();
             }
 
@@ -148,7 +165,7 @@ public class Spy: MonoBehaviour {
 
         if (_set) {
             _hasMadeInput = true;
-            if (_isAlive) {
+            if (isAlive) {
                 SetTrap();
             }
             //Debug.Log("Set");
@@ -156,6 +173,9 @@ public class Spy: MonoBehaviour {
 
         if (_attack) {
             _hasMadeInput = true;
+            if (isAlive) {
+                AttackNearest();
+            }
             //Debug.Log("Attack");
         }
 
@@ -178,6 +198,52 @@ public class Spy: MonoBehaviour {
         if (trappable != null) {
             trappable.OnTrapSet(this);
         }
+    }
+
+    private void AttackNearest() {
+        Spy nearestSpy = GetClosestOtherSpy();
+        if (nearestSpy != null) {
+            DamageTarget(nearestSpy);
+        }
+        else {
+            //SlashAnimation(transform.position+(transform.forward*0.5f)+Vector3.up);
+        }
+    }
+
+    public void DamageTarget(Spy spy) {
+        Vector3 middlePoint = (spy.transform.position - transform.position)/2f + transform.position + Vector3.up ;
+        SlashAnimation(middlePoint);
+        spy.Hurt();
+    }
+
+    private void SlashAnimation(Vector3 position) {
+        Instantiate(_stabPrefab, position,Quaternion.identity,transform);
+    }
+
+    public void Hurt() {
+        Debug.Log("spy injured");
+    }
+    
+    public Spy GetClosestOtherSpy() {
+        Vector3 frontPos = transform.position + (transform.forward * 0.25f);
+        Collider[] inRange = Physics.OverlapSphere(frontPos, 0.5f,_spyLayerMask);
+        
+        Spy closest = null;
+
+        float closestDistance = 1000f;
+
+        foreach (Collider collider in inRange) {
+            GameObject colliderObject = collider.gameObject;
+            Spy spy = colliderObject.GetComponent<Spy>();
+            float distanceToTarget = Vector3.Distance(colliderObject.transform.position, frontPos);
+            if (spy != null && spy != this && spy.isAlive && distanceToTarget < closestDistance)
+                if (colliderObject != gameObject) {
+                    closest = spy;
+                    closestDistance = distanceToTarget;
+                }
+        }
+
+        return closest;
     }
     
     public IInteractable GetClosestInteractable() {
@@ -225,7 +291,7 @@ public class Spy: MonoBehaviour {
     }
 
     public void KillByWin() {
-        _isAlive = false;
+        isAlive = false;
         isPlaying = false;
         SetVisible(false);
         StartCoroutine(nameof(ChangeCameraToDeathRoom));
@@ -235,7 +301,7 @@ public class Spy: MonoBehaviour {
     
     public void KillByTrap(Room room) {
         _respawnTimer = Time.time + RESPAWN_TIME;
-        _isAlive = false;
+        isAlive = false;
         SetVisible(false);
         StartCoroutine(nameof(ChangeCameraToDeathRoom));
         Explode();
@@ -254,7 +320,7 @@ public class Spy: MonoBehaviour {
 
     public void KillBySpy(Spy spy) {
         _respawnTimer = Time.time + RESPAWN_TIME;
-        _isAlive = false;
+        isAlive = false;
         SetVisible(false);
         StartCoroutine(nameof(ChangeCameraToDeathRoom));
         Explode();
@@ -290,7 +356,7 @@ public class Spy: MonoBehaviour {
         currentRoom = exitRoom;
         _cameraSystem.SwitchCameraToRoom(playerIndex,2);
         SetVisible(true);
-        _isAlive = true;
+        isAlive = true;
         isPlaying = false;
         _handler.KillAllSpiesExcept(playerIndex);
     }
@@ -305,7 +371,8 @@ public class Spy: MonoBehaviour {
         currentRoom = emptyRoom;
         _cameraSystem.SwitchCameraToRoom(playerIndex,currentRoom);
         SetVisible(true);
-        _isAlive = true;
+        isAlive = true;
+        healthPoints = MaxHealth;
     }
 
     private void SetVisible(bool state) {

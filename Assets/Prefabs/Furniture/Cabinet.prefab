@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07275119b9849c094957f5d34f676a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapped: 0
   inventory: 1
   myRoom: {fileID: 0}
 --- !u!65 &4702085237294153955
@@ -58,8 +59,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 1.8498151, z: 0.47520304}
-  m_Center: {x: 0, y: 0.9601363, z: 0.023883104}
+  m_Size: {x: 1.8383895, y: 2.810819, z: 0.64339304}
+  m_Center: {x: 0.009608924, y: 1.4406382, z: 0.107978106}
 --- !u!1 &7649142263840971967
 GameObject:
   m_ObjectHideFlags: 0
