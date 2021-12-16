@@ -4,6 +4,8 @@ using UnityEngine;
 
 public static class G {
 
+    public const float RESPAWN_TIME = 3f;
+
     public enum GridDir {
         None,
         North,

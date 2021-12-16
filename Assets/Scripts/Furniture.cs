@@ -21,7 +21,7 @@ public class Furniture: MonoBehaviour, IInteractable, ICanBeTrapped {
         myRoom = transform.parent.GetComponent<Room>();
     }
     
-    public void OnInteract(Spy spy) {
+    public virtual void OnInteract(Spy spy) {
         if (isTrapped) {
             spy.KillByTrap(myRoom);
             isTrapped = false;
@@ -34,7 +34,7 @@ public class Furniture: MonoBehaviour, IInteractable, ICanBeTrapped {
         }
         else {
             (inventory, spy.inventory) = (spy.inventory, inventory);
-            if (spy.inventory == MeshRegistry.ItemType.Briefcase) {
+            if (spy.inventory == G.ItemType.Briefcase) {
                 _ui.SetPanelVisiblity(true);
             }
         }

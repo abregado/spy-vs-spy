@@ -26,7 +26,7 @@ public class Spy: MonoBehaviour {
     private float speedResetTimer;
     
     //Movement Stuff
-    public float moveSpeed = 3.0f;
+    [FormerlySerializedAs("moveSpeed")] public float maxMoveSpeed = 3.0f;
     private Player player; // The Rewired Player
     private CharacterController cc;
     private Vector3 _moveVector;
@@ -47,8 +47,7 @@ public class Spy: MonoBehaviour {
     public bool isPlaying;
     private bool _hasMadeInput;
     private float _respawnTimer;
-    private const float RESPAWN_TIME = 30f;
-    
+
     void Awake() {
         _itemHider = FindObjectOfType<ItemHider>();
         _cameraSystem = FindObjectOfType<RoomCameraSystem>();
@@ -102,8 +101,8 @@ public class Spy: MonoBehaviour {
     }
     
     void Update () {
-        if (currentMoveSpeed < moveSpeed && Time.time > speedResetTimer) {
-            currentMoveSpeed = moveSpeed;
+        if (currentMoveSpeed < maxMoveSpeed && Time.time > speedResetTimer) {
+            currentMoveSpeed = maxMoveSpeed;
         }
         
         if (isAlive == false && isPlaying == false && _hasMadeInput) {
@@ -153,7 +152,7 @@ public class Spy: MonoBehaviour {
 
     private void ProcessMovement() {
         if(_moveVector.x != 0.0f || _moveVector.y != 0.0f) {
-            Vector3 frameVector = _moveVector.normalized * moveSpeed * Time.deltaTime * -1f;
+            Vector3 frameVector = _moveVector.normalized * currentMoveSpeed * Time.deltaTime * -1f;
             Vector3 actualMoveVector = new Vector3(frameVector.x, 0f, frameVector.y);
             cc.Move(actualMoveVector);
             transform.LookAt(transform.position+actualMoveVector);
@@ -218,14 +217,14 @@ public class Spy: MonoBehaviour {
         }
 
         currentMoveSpeed = AttackMoveSpeed;
-        speedResetTimer = Time.time + 2f;
+        speedResetTimer = Time.time + 0.5f;
     }
 
     public void DamageTarget(Spy spy) {
         Vector3 middlePoint = (spy.transform.position - transform.position)/2f + transform.position + Vector3.up ;
         SlashAnimation(middlePoint);
         int damage = 2;
-        if (inventory == MeshRegistry.ItemType.None) {
+        if (inventory == G.ItemType.None) {
             damage = 3;
         }
         spy.Hurt(damage,this);
@@ -319,10 +318,11 @@ public class Spy: MonoBehaviour {
         StartCoroutine(nameof(ChangeCameraToDeathRoom));
         Explode();
         _collider.enabled = false;
+        SetInventoryMesh();
     }
     
     public void KillByTrap(Room room) {
-        _respawnTimer = Time.time + RESPAWN_TIME;
+        _respawnTimer = Time.time + G.RESPAWN_TIME;
         isAlive = false;
         SetVisible(false);
         StartCoroutine(nameof(ChangeCameraToDeathRoom));
@@ -337,19 +337,21 @@ public class Spy: MonoBehaviour {
             _itemHider.HideItemAnywhere(inventory);
             inventory = G.ItemType.None;
         }
-        
+        SetInventoryMesh();
     }
 
-    public void KillBySpy(Spy spy) {
-        _respawnTimer = Time.time + RESPAWN_TIME;
+    public void KillBySpy(Spy killer) {
+        _respawnTimer = Time.time + G.RESPAWN_TIME;
         isAlive = false;
         SetVisible(false);
         StartCoroutine(nameof(ChangeCameraToDeathRoom));
         BloodExplode();
 
-        if (inventory != G.ItemType.None && spy.inventory == G.ItemType.None) {
-            spy.inventory = inventory;
+        if (inventory != G.ItemType.None && killer.inventory == G.ItemType.None) {
+            killer.inventory = inventory;
             inventory = G.ItemType.None;
+            SetInventoryMesh();
+            killer.SetInventoryMesh();
         }
         else {
             if (currentRoom.HasAnyFurnitureEmpty()) {
@@ -364,7 +366,7 @@ public class Spy: MonoBehaviour {
     }
 
     private IEnumerator ChangeCameraToDeathRoom() {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(G.RESPAWN_TIME/2f);
         _cameraSystem.SwitchCameraToRoom(playerIndex,1);
     }
 
@@ -395,6 +397,7 @@ public class Spy: MonoBehaviour {
         SetVisible(true);
         isAlive = true;
         healthPoints = MaxHealth;
+        SetInventoryMesh();
     }
 
     private void SetVisible(bool state) {

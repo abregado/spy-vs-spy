@@ -7,13 +7,11 @@ public class Room : MonoBehaviour {
     public bool canSpawnHere = true;
 
     private CinemachineVirtualCamera[] _cameras;
-    private Waypoint[] _waypoints;
     public RoomTile myTile;
 
     // Start is called before the first frame update
     void Awake() {
         _cameras = transform.GetComponentsInChildren<CinemachineVirtualCamera>();
-        _waypoints = transform.GetComponentsInChildren<Waypoint>();
     }
 
     public CinemachineVirtualCamera GetPlayerCamera(int playerIndex) {
@@ -21,7 +19,7 @@ public class Room : MonoBehaviour {
     }
 
     public Vector3 GetWaypointPosition(int playerIndex) {
-        return _waypoints[playerIndex].transform.position;
+        return transform.position;
     }
 
     public bool HideItem(G.ItemType item) {

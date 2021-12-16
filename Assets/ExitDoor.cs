@@ -13,7 +13,7 @@ public class ExitDoor: MonoBehaviour, IInteractable {
     public void OnInteract(Spy spy) {
         if (spy.inventory == G.ItemType.Briefcase && _briefcase.IsComplete()) {
             Debug.Log("You Win!");
+            spy.GotoWinRoom();
         }
-        spy.GotoWinRoom();
     }
 }
