@@ -80,6 +80,7 @@ public class LevelGenerator : MonoBehaviour {
                 GameObject obj = Instantiate(prefab, spawn);
                 placeableFurniture.Add(obj.GetComponent<Furniture>());
                 room.furniture.Add(obj.GetComponent<Furniture>());
+                obj.GetComponent<Furniture>().Init(room);
                 count++;
             }
         }
@@ -94,6 +95,7 @@ public class LevelGenerator : MonoBehaviour {
             GameObject obj = Instantiate(prefab, spawn);
             // placeableFurniture.Add(obj.GetComponent<Furniture>());
             randomRoom.furniture.Add(obj.GetComponent<Furniture>());
+            obj.GetComponent<Furniture>().Init(randomRoom);
             count++;
         }
 

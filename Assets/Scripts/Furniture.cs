@@ -14,11 +14,11 @@ public class Furniture: MonoBehaviour, IInteractable, ICanBeTrapped {
     private BriefcaseHandler _briefcase;
     private BriefcaseUI _ui;
 
-    void Awake() {
+    public void Init(Room room) {
         _animation = transform.Find("View").GetComponent<DOTweenAnimation>();
         _briefcase = FindObjectOfType<BriefcaseHandler>();
         _ui = FindObjectOfType<BriefcaseUI>();
-        myRoom = transform.parent.GetComponent<Room>();
+        myRoom = room;
     }
     
     public virtual void OnInteract(Spy spy) {
