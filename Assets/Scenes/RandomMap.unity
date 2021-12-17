@@ -857,7 +857,6 @@ MonoBehaviour:
   - {fileID: 6774635129409339195, guid: f0da5e56907d12345aeb7f734f04e53a, type: 3}
   - {fileID: 6774635129409339195, guid: 2fc681698713b8f428a026050bbd5e53, type: 3}
   - {fileID: 576253418628498998, guid: ad316ddf4f3012e46b062cdf99897936, type: 3}
-  - {fileID: 6774635129409339195, guid: 804cc0ae79b7d934283d8bbe3c08218b, type: 3}
   - {fileID: 6774635129409339195, guid: 14816244b6228d34aaa010cb98e9557c, type: 3}
   - {fileID: 5568737789271731504, guid: de79ba1ebcbe30f40b9869896f2910b8, type: 3}
   - {fileID: 2182795269658601892, guid: 58317e87e3495b54c998d2c52da18830, type: 3}
@@ -905,11 +904,15 @@ MonoBehaviour:
   gridHeight: 10
   cellSize: 10
   offset: {x: 0, y: 0, z: 0}
+  exitCount: 5
+  seachableFurnitureCount: 15
+  decoFurnitureCount: 10
   roomParent: {fileID: 1619662221}
   roomPrefab: {fileID: 3518934948487414389, guid: ce548dd7ec442d545aa6005d92cc1e2f, type: 3}
   doorPrefab: {fileID: 8643294121828397157, guid: ba254add4979b264882579eb9335b1f8, type: 3}
   doorSouthPrefab: {fileID: 8643294121828397157, guid: bebe060045aa04941a17bffdd617ac12, type: 3}
   windoofPrefab: {fileID: 575659083884294885, guid: 00e2cd926d5b14846ad020518e24c670, type: 3}
+  exitDoors: []
 --- !u!114 &556905230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -927,6 +930,7 @@ MonoBehaviour:
   meshReg: {fileID: 556905226}
   briefCase: {fileID: 556905227}
   itemHider: {fileID: 556905228}
+  spyHandler: {fileID: 556905225}
 --- !u!1 &651010534
 GameObject:
   m_ObjectHideFlags: 0

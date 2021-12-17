@@ -14,7 +14,8 @@ public class LevelGenerator : MonoBehaviour {
     public Vector3 offset;
 
     public int exitCount;
-    public int extraFurnitureCount;
+    public int seachableFurnitureCount;
+    public int decoFurnitureCount;
 
     public Transform roomParent;
     public GameObject roomPrefab;
@@ -68,23 +69,63 @@ public class LevelGenerator : MonoBehaviour {
         int count = 0;
         
         foreach (Room room in rooms) {
+            if (count >= seachableFurnitureCount) {
+                Debug.Log(count + "Furnitures placed very tastefully");
+                return;
+            }
             if (room.doors.Count < 2) {
                 Transform spawn = GetRandomSpawnPointForFurniture(room);
-                GameObject prefab = GetRandomPlaceableFurniture();
+                GameObject prefab = GetRandomSearchableFurniture();
                 GameObject obj = Instantiate(prefab, spawn);
                 placeableFurniture.Add(obj.GetComponent<Furniture>());
+                count++;
             }
         }
 
-        for (int i = 0; i < extraFurnitureCount; i++) {
-            
+        for (int i = count; i < seachableFurnitureCount; i++) {
+            Room randomRoom = rooms[Random.Range(0, rooms.Count)];
+            Transform spawn = GetRandomSpawnPointForFurniture(randomRoom);
+            if (spawn == null) {
+                continue;
+            }
+            GameObject prefab = GetRandomSearchableFurniture();
+            GameObject obj = Instantiate(prefab, spawn);
+            placeableFurniture.Add(obj.GetComponent<Furniture>());
+            count++;
         }
+
+        Debug.Log(count + "Searchable Furniture placed very tastefully");
+
+        count = 0;
+        for (int i = 0; i < decoFurnitureCount; i++) {
+            Room randomRoom = rooms[Random.Range(0, rooms.Count)];
+            Transform spawn = GetRandomSpawnPointForFurniture(randomRoom);
+            if (spawn == null) {
+                continue;
+            }
+            GameObject prefab = GetRandomDecoFurniture();
+            GameObject obj = Instantiate(prefab, spawn);
+            placeableFurniture.Add(obj.GetComponent<Furniture>());
+            count++;
+        }
+        
+        Debug.Log(count + "Searchable Furniture placed with love for detail");
     }
 
-    private GameObject GetRandomPlaceableFurniture() {
+    private GameObject GetRandomSearchableFurniture() {
         PickCandidate:
         GameObject candidate = _gameManager.meshReg.GetRandomFurniture();
         if (candidate.GetComponent<Furniture>() == null) {
+            goto PickCandidate;
+        }
+
+        return candidate;
+    }
+    
+    private GameObject GetRandomDecoFurniture() {
+        PickCandidate:
+        GameObject candidate = _gameManager.meshReg.GetRandomFurniture();
+        if (candidate.GetComponent<Furniture>() != null) {
             goto PickCandidate;
         }
 
