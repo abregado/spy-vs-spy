@@ -857,10 +857,14 @@ MonoBehaviour:
   - {fileID: 6774635129409339195, guid: f0da5e56907d12345aeb7f734f04e53a, type: 3}
   - {fileID: 6774635129409339195, guid: 2fc681698713b8f428a026050bbd5e53, type: 3}
   - {fileID: 576253418628498998, guid: ad316ddf4f3012e46b062cdf99897936, type: 3}
-  - {fileID: 6774635129409339195, guid: 804cc0ae79b7d934283d8bbe3c08218b, type: 3}
+  - {fileID: 6774635129409339195, guid: 61264c6bca2b89f4899169683e2ef61c, type: 3}
   - {fileID: 6774635129409339195, guid: 14816244b6228d34aaa010cb98e9557c, type: 3}
   - {fileID: 5568737789271731504, guid: de79ba1ebcbe30f40b9869896f2910b8, type: 3}
   - {fileID: 2182795269658601892, guid: 58317e87e3495b54c998d2c52da18830, type: 3}
+  - {fileID: 6774635129409339195, guid: 5936327130acc4f4d928408e1dacbad9, type: 3}
+  - {fileID: 6774635129409339195, guid: a31bead2b30154b47a0e71d5bcf909ea, type: 3}
+  - {fileID: 6774635129409339195, guid: 09b433356c280de4a915a62711589d88, type: 3}
+  - {fileID: 6774635129409339195, guid: 9766f450ecb931f409fbbafba1bfe1eb, type: 3}
 --- !u!114 &556905227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -906,7 +910,8 @@ MonoBehaviour:
   cellSize: 10
   offset: {x: 0, y: 0, z: 0}
   exitCount: 4
-  extraFurnitureCount: 0
+  seachableFurnitureCount: 12
+  decoFurnitureCount: 4
   roomParent: {fileID: 1619662221}
   roomPrefab: {fileID: 3518934948487414389, guid: ce548dd7ec442d545aa6005d92cc1e2f, type: 3}
   doorPrefab: {fileID: 8643294121828397157, guid: ba254add4979b264882579eb9335b1f8, type: 3}

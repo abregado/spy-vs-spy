@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2182795269658601892}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.2, z: 0.3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8281847319926707962}
@@ -44,8 +44,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9011287, y: 3.022591, z: 0.35620403}
-  m_Center: {x: 0.033266097, y: 0.5341356, z: 0.09296751}
+  m_Size: {x: 1.4512024, y: 3.022591, z: 0.5823761}
+  m_Center: {x: 0.0011551082, y: 0.5341356, z: 0.20605385}
 --- !u!114 &1067333036786666426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,7 +85,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3056176298089974304}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2611314911833028997}
@@ -250,6 +250,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 6fd8548220a14f54aaf833e41deb87f0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 14f6dde3c2b512f4d9292ed522970f64, type: 2}
     - target: {fileID: 919132149155446097, guid: 6fd8548220a14f54aaf833e41deb87f0, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Medical_Box_06

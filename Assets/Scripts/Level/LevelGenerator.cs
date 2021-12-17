@@ -73,7 +73,7 @@ public class LevelGenerator : MonoBehaviour {
                 Debug.Log(count + "Furnitures placed very tastefully");
                 return;
             }
-            if (room.doors.Count < 2) {
+            if (room.doors.Count < 3) {
                 Transform spawn = GetRandomSpawnPointForFurniture(room);
                 GameObject prefab = GetRandomSearchableFurniture();
                 GameObject obj = Instantiate(prefab, spawn);
