@@ -26,9 +26,14 @@ public class ItemHider : MonoBehaviour {
         
         foreach (G.ItemType item in objectsToHide) {
             if (unusedRooms.Count > 0) {
+                try_again:
                 Room randomRoom = unusedRooms[Random.Range(0, unusedRooms.Count - 1)];
-                randomRoom.HideItem(item);
-                unusedRooms.Remove(randomRoom);
+                if (randomRoom.HideItem(item)) {
+                    unusedRooms.Remove(randomRoom);    
+                }
+                else {
+                    goto try_again;
+                }
             }
         }
     }

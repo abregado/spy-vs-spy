@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07275119b9849c094957f5d34f676a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTrapped: 1
+  isTrapped: 0
   inventory: 0
   myRoom: {fileID: 0}
 --- !u!65 &76464327031445116
@@ -56,11 +56,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2182795269658601892}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9011287, y: 1.960753, z: 0.35620403}
-  m_Center: {x: 0.033266097, y: 1.2484665, z: 0.09296751}
+  m_Size: {x: 0.9011287, y: 2.948452, z: 0.20972158}
+  m_Center: {x: 0.033266097, y: 1.126584, z: 0.019726284}
 --- !u!1 &3056176298089974304
 GameObject:
   m_ObjectHideFlags: 0

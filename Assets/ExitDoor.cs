@@ -20,6 +20,7 @@ public class ExitDoor: MonoBehaviour, IInteractable {
     }
 
     public void SetUnlocked() {
+        Debug.Log("Unlocking exit");
         unlocked = true;
         transform.Find("Blinds").gameObject.SetActive(false);
     }

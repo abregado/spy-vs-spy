@@ -16,7 +16,8 @@ public class BriefcaseHandler : MonoBehaviour {
         slotStates = new bool[slotConfig.Length];
         _briefcaseUI = FindObjectOfType<BriefcaseUI>();
         _briefcaseUI.Init();
-        }
+        _completeAndUnlocked = false;
+    }
 
     public bool CheckNeedsItem(G.ItemType item) {
         for (int i = 0; i < slotStates.Length; i++) {
@@ -45,10 +46,10 @@ public class BriefcaseHandler : MonoBehaviour {
     }
 
     public void SetOneExitUnlocked() {
+        Debug.Log("The way is open");
         
-        ExitDoor[] exitDoors = FindObjectsOfType<ExitDoor>();
-        
-        exitDoors[Random.Range(0,exitDoors.Length)].SetUnlocked();
+        LevelGenerator genny = FindObjectOfType<LevelGenerator>();
+        genny.exitDoors[Random.Range(0,genny.exitDoors.Count)].SetUnlocked();
         _completeAndUnlocked = true;
     }
 

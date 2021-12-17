@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTrapped: 0
-  inventory: 1
+  inventory: 0
   myRoom: {fileID: 0}
 --- !u!65 &4702085237294153955
 BoxCollider:
