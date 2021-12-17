@@ -139,6 +139,9 @@ public class Spy: MonoBehaviour {
     }
 
     private void GetInput() {
+        if (player == null) {
+            return;
+        }
         _moveVector.x = player.GetAxis("MoveHorizontal");
         _moveVector.y = player.GetAxis("MoveVertical");
         _interact = player.GetButtonDown("Interact");
@@ -198,11 +201,13 @@ public class Spy: MonoBehaviour {
         if (isInMap) {
             _cameraSystem.SetCameraProjectionOrtho(playerIndex,false);
             _cameraSystem.SwitchCameraToRoom(playerIndex,currentRoom);
+            _cameraSystem.SetCameraToMapMode(playerIndex, false);
             isInMap = false;
         }
         else {
             _cameraSystem.SetCameraProjectionOrtho(playerIndex,true);
             _cameraSystem.SwitchCameraToRoom(playerIndex,_cameraSystem.GetMapRoom());
+            _cameraSystem.SetCameraToMapMode(playerIndex, true);
             isInMap = true;
         }
     }

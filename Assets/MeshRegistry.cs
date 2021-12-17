@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Packages.Rider.Editor.UnitTesting;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

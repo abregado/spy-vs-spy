@@ -62,6 +62,33 @@ public class RoomCameraSystem : MonoBehaviour {
         playerCameras[playerIndex].orthographic = state;
     }
 
+    public void SetCameraToMapMode(int playerIndex, bool mapModeOn) {
+        LayerMask mask = LayerMask.GetMask();
+        if (mapModeOn) {
+            mask = LayerMask.GetMask("MiniMap");
+        } else {
+            if (playerIndex == 0) {
+                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", 
+                    "Clickable", "Water", "UI", "Player1Camera");
+            }
+            if (playerIndex == 1) {
+                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", 
+                    "Clickable", "Water", "UI", "Player2Camera");
+            }
+            if (playerIndex == 2) {
+                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", 
+                    "Clickable", "Water", "UI", "Player3Camera");
+            }
+            if (playerIndex == 3) {
+                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", 
+                    "Clickable", "Water", "UI", "Player4Camera");
+            }
+            
+        }
+
+        playerCameras[playerIndex].cullingMask = mask.value;
+    }
+
     public Room GetWinRoom() {
         return winRoom;
     }

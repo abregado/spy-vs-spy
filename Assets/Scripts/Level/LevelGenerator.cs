@@ -23,7 +23,7 @@ public class LevelGenerator : MonoBehaviour {
     public GameObject doorSouthPrefab;
     public GameObject windoofPrefab;
     
-    private Grid<RoomTile> grid;
+    public Grid<RoomTile> grid;
     public List<Room> rooms = new List<Room>();
     public List<Furniture> placeableFurniture = new List<Furniture>();
 
@@ -43,6 +43,7 @@ public class LevelGenerator : MonoBehaviour {
         PlaceDoors();
         PlaceExits();
         PlaceFurniture();
+        
     }
 
     private void ClearLevel() {
@@ -54,16 +55,16 @@ public class LevelGenerator : MonoBehaviour {
     }
     
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            ClearLevel();
-            GenerateGrid();
-            SpawnRooms();
-            PlaceDoors();
-            PlaceExits();
-            PlaceFurniture();
-        }
-    }
+    // private void Update() {
+    //     if (Input.GetKeyDown(KeyCode.Space)) {
+    //         ClearLevel();
+    //         GenerateGrid();
+    //         SpawnRooms();
+    //         PlaceDoors();
+    //         PlaceExits();
+    //         PlaceFurniture();
+    //     }
+    // }
 
     private void PlaceFurniture() {
         int count = 0;
@@ -91,7 +92,7 @@ public class LevelGenerator : MonoBehaviour {
             }
             GameObject prefab = GetRandomSearchableFurniture();
             GameObject obj = Instantiate(prefab, spawn);
-            placeableFurniture.Add(obj.GetComponent<Furniture>());
+            // placeableFurniture.Add(obj.GetComponent<Furniture>());
             randomRoom.furniture.Add(obj.GetComponent<Furniture>());
             count++;
         }

@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
     public BriefcaseHandler briefCase;
     public ItemHider itemHider;
     public SpyHandler spyHandler;
+    public GridVisualizer gridViz;
     
     private void Start() {
         meshReg.Init();
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour {
         roomCameraSystem.Init();
         itemHider.Init();
         spyHandler.Init();
+        gridViz.SetGrid(levelGen.grid);
+        gridViz.DrawMarker();
     }
     
 }
