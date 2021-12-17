@@ -71,7 +71,7 @@ public class LevelGenerator : MonoBehaviour {
         
         foreach (Room room in rooms) {
             if (count >= seachableFurnitureCount) {
-                Debug.Log(count + "Furnitures placed very tastefully");
+                Debug.Log(count + "Furnitures placed in boring rooms");
                 return;
             }
             if (room.doors.Count < 3) {
@@ -112,7 +112,7 @@ public class LevelGenerator : MonoBehaviour {
             count++;
         }
         
-        Debug.Log(count + "Searchable Furniture placed with love for detail");
+        Debug.Log(count + "Deco Furniture placed with love for detail");
     }
 
     private GameObject GetRandomSearchableFurniture() {

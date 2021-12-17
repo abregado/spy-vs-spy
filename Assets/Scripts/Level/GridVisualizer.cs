@@ -77,7 +77,11 @@ public class GridVisualizer : MonoBehaviour {
                  if (tile.room == null) {
                      continue;
                  }
+
                  Color c = Color.white;
+                 if (tile.room.HasAnyFurnitureAnItem()) {
+                     c = Color.magenta;
+                 }
                  SpriteRenderer renderer = UtilsClass.CreateWorldSprite(gridSprites, "Dot" + tile.gridPosition.x + "-" + tile.gridPosition.y, 
                      gridSprite, grid.GetWorldPositionCenter(tile.gridPosition.x, tile.gridPosition.y), 
                      new Vector3(grid.GetCellSize(), grid.GetCellSize(), 0), 1, c).GetComponent<SpriteRenderer>();
