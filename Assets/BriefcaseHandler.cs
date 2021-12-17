@@ -30,17 +30,21 @@ public class BriefcaseHandler : MonoBehaviour {
     }
 
     public bool PutInItem(G.ItemType item) {
+        
         for (int i = 0; i < slotStates.Length; i++) {
             if (slotConfig[i] == item && slotStates[i] == false) {
                 slotStates[i] = true;
                 _briefcaseUI.UpdateImageVisiblity(i,true);
+                
+                if (IsComplete() && _completeAndUnlocked == false) {
+                    SetOneExitUnlocked();
+                }
+
                 return true;
             }
         }
 
-        if (IsComplete() && _completeAndUnlocked == false) {
-            SetOneExitUnlocked();
-        }
+        
         
         return false;
     }

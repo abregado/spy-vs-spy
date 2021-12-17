@@ -148,7 +148,7 @@ public class Spy: MonoBehaviour {
     }
 
     private void ProcessMovement() {
-        if(_moveVector.x != 0.0f || _moveVector.y != 0.0f) {
+        if(_moveVector.x != 0.0f || _moveVector.y != 0.0f  && isInMap == false) {
             Vector3 frameVector = _moveVector.normalized * currentMoveSpeed * Time.deltaTime * -1f;
             Vector3 actualMoveVector = new Vector3(frameVector.x, 0f, frameVector.y);
             cc.Move(actualMoveVector);
@@ -161,7 +161,7 @@ public class Spy: MonoBehaviour {
         // Debug.Log("-------------");
         if (_interact) {
             _hasMadeInput = true;
-            if (isAlive) {
+            if (isAlive && isInMap == false) {
                 Interact();
             }
 
@@ -170,7 +170,7 @@ public class Spy: MonoBehaviour {
 
         if (_set) {
             _hasMadeInput = true;
-            if (isAlive) {
+            if (isAlive && isInMap == false) {
                 SetTrap();
             }
             //Debug.Log("Set");
@@ -178,7 +178,7 @@ public class Spy: MonoBehaviour {
 
         if (_attack) {
             _hasMadeInput = true;
-            if (isAlive) {
+            if (isAlive && isInMap == false) {
                 AttackNearest();
             }
             //Debug.Log("Attack");
