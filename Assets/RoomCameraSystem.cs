@@ -8,7 +8,7 @@ public class RoomCameraSystem : MonoBehaviour {
     public Transform roomParent;
     public Camera[] playerCameras;
     private Room[] rooms;
-    public Room winRoom, deathRoom, welcomeRoom;
+    public Room winRoom, deathRoom, welcomeRoom, mapRoom;
 
     public void Init() {
 
@@ -28,6 +28,10 @@ public class RoomCameraSystem : MonoBehaviour {
         
         for (int p = 0; p < 4; p++) {
             SwitchCameraToRoom(p,welcomeRoom);    
+        }
+        
+        for (int i = 0; i < 4; i++) {
+            mapRoom.GetPlayerCamera(i).m_Lens.OrthographicSize = 25f;
         }
     }
 
@@ -50,7 +54,12 @@ public class RoomCameraSystem : MonoBehaviour {
         welcomeRoom.GetPlayerCamera(playerIndex).Priority = 0;
         deathRoom.GetPlayerCamera(playerIndex).Priority = 0;
         winRoom.GetPlayerCamera(playerIndex).Priority = 0;
+        mapRoom.GetPlayerCamera(playerIndex).Priority = 0;
         room.GetPlayerCamera(playerIndex).Priority = 10;
+    }
+
+    public void SetCameraProjectionOrtho(int playerIndex,bool state) {
+        playerCameras[playerIndex].orthographic = state;
     }
 
     public Room GetWinRoom() {
@@ -61,6 +70,10 @@ public class RoomCameraSystem : MonoBehaviour {
     }
     public Room GetWelcomeRoom() {
         return welcomeRoom;
+    }
+
+    public Room GetMapRoom() {
+        return mapRoom;
     }
 
     public void SetAllCameraToZero(int playerIndex) {

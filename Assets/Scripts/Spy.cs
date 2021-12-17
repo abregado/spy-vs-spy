@@ -39,6 +39,7 @@ public class Spy: MonoBehaviour {
     private int _interactionLayerMask = 1 << 3;
     private int _spyLayerMask = 1 << 10;
 
+    public bool isInMap;
     public bool isAlive;
     public bool isPlaying;
     private bool _hasMadeInput;
@@ -185,11 +186,27 @@ public class Spy: MonoBehaviour {
 
         if (_map) {
             _hasMadeInput = true;
+            if (isAlive) {
+                ToggleMap();
+            }
             //Debug.Log("Map");
         }
         // Debug.Log("-------------");
     }
 
+    private void ToggleMap() {
+        if (isInMap) {
+            _cameraSystem.SetCameraProjectionOrtho(playerIndex,false);
+            _cameraSystem.SwitchCameraToRoom(playerIndex,currentRoom);
+            isInMap = false;
+        }
+        else {
+            _cameraSystem.SetCameraProjectionOrtho(playerIndex,true);
+            _cameraSystem.SwitchCameraToRoom(playerIndex,_cameraSystem.GetMapRoom());
+            isInMap = true;
+        }
+    }
+    
     private void Interact() {
         IInteractable interactable = GetClosestInteractable();
         if (interactable != null) {

@@ -11,18 +11,24 @@ public class ItemHider : MonoBehaviour {
     private Furniture[] _hidingLocations;
     
     public void Init() {
-        _hidingLocations = FindObjectsOfType<Furniture>();
-
-        foreach (Furniture location in _hidingLocations) {
+        LevelGenerator genny = FindObjectOfType<LevelGenerator>();
+        List<Room> unusedRooms = new List<Room>();
+        
+        foreach (Furniture location in genny.placeableFurniture) {
             location.inventory = G.ItemType.None;
         }
 
-        List<Furniture> unusedLocations = _hidingLocations.ToList();
+        foreach (Room room in genny.rooms) {
+            if (room.HasAnyFurnitureEmpty()) {
+                unusedRooms.Add(room);
+            }
+        }
+        
         foreach (G.ItemType item in objectsToHide) {
-            if (unusedLocations.Count > 0) {
-                Furniture randomLocation = unusedLocations[Random.Range(0, unusedLocations.Count - 1)];
-                randomLocation.inventory = item;
-                unusedLocations.Remove(randomLocation);
+            if (unusedRooms.Count > 0) {
+                Room randomRoom = unusedRooms[Random.Range(0, unusedRooms.Count - 1)];
+                randomRoom.HideItem(item);
+                unusedRooms.Remove(randomRoom);
             }
         }
     }

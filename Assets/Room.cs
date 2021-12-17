@@ -9,6 +9,7 @@ public class Room : MonoBehaviour {
     private CinemachineVirtualCamera[] _cameras;
     public RoomTile myTile;
     public Dictionary<G.GridDir, Door> doors = new Dictionary<G.GridDir, Door>();
+    public List<Furniture> furniture = new List<Furniture>();
 
     // Start is called before the first frame update
     void Awake() {
@@ -43,9 +44,7 @@ public class Room : MonoBehaviour {
     }
 
     public bool HasAnyFurnitureAnItem() {
-        Furniture[] roomFurniture = GetComponentsInChildren<Furniture>();
-
-        foreach (Furniture furni in roomFurniture) {
+        foreach (Furniture furni in furniture) {
             if (furni.inventory != G.ItemType.None) {
                 return true;
             }
@@ -55,9 +54,7 @@ public class Room : MonoBehaviour {
     }
 
     public bool HasAnyFurnitureEmpty() {
-        Furniture[] roomFurniture = GetComponentsInChildren<Furniture>();
-
-        foreach (Furniture furni in roomFurniture) {
+        foreach (Furniture furni in furniture) {
             if (furni.inventory == G.ItemType.None) {
                 return true;
             }

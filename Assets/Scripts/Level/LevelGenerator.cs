@@ -24,8 +24,8 @@ public class LevelGenerator : MonoBehaviour {
     public GameObject windoofPrefab;
     
     private Grid<RoomTile> grid;
-    private List<Room> rooms = new List<Room>();
-    private List<Furniture> placeableFurniture = new List<Furniture>();
+    public List<Room> rooms = new List<Room>();
+    public List<Furniture> placeableFurniture = new List<Furniture>();
 
     public List<ExitDoor> exitDoors = new List<ExitDoor>();
 
@@ -78,6 +78,7 @@ public class LevelGenerator : MonoBehaviour {
                 GameObject prefab = GetRandomSearchableFurniture();
                 GameObject obj = Instantiate(prefab, spawn);
                 placeableFurniture.Add(obj.GetComponent<Furniture>());
+                room.furniture.Add(obj.GetComponent<Furniture>());
                 count++;
             }
         }
@@ -91,6 +92,7 @@ public class LevelGenerator : MonoBehaviour {
             GameObject prefab = GetRandomSearchableFurniture();
             GameObject obj = Instantiate(prefab, spawn);
             placeableFurniture.Add(obj.GetComponent<Furniture>());
+            randomRoom.furniture.Add(obj.GetComponent<Furniture>());
             count++;
         }
 
@@ -105,7 +107,7 @@ public class LevelGenerator : MonoBehaviour {
             }
             GameObject prefab = GetRandomDecoFurniture();
             GameObject obj = Instantiate(prefab, spawn);
-            placeableFurniture.Add(obj.GetComponent<Furniture>());
+            //placeableFurniture.Add(obj.GetComponent<Furniture>());
             count++;
         }
         
@@ -313,11 +315,11 @@ public class LevelGenerator : MonoBehaviour {
         
         switch (dir) {
             case G.GridDir.South:
-                return spawns.Find("Bottom_middle");
+                return spawns.Find("Bottom_left");
             case G.GridDir.West:
-                return spawns.Find("Left_middle");
+                return spawns.Find("Left_top");
             case G.GridDir.East:
-                return spawns.Find("Right_middle");
+                return spawns.Find("Right_top");
             default:
                 throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
         }
@@ -326,15 +328,13 @@ public class LevelGenerator : MonoBehaviour {
     private Transform GetRandomSpawnPointForDir(G.GridDir dir, Room room) {
         Transform spawns = room.transform.Find("Spawnpoints").transform;
         
-        int index = Random.Range(0, 3);
+        int index = Random.Range(0, 1);
         switch (dir) {
             case G.GridDir.North:
                 switch (index) {
                     case 0:
                         return spawns.Find("Top_left");
                     case 1:
-                        return spawns.Find("Top_middle");
-                    case 2:
                         return spawns.Find("Top_right");
                     default:
                         Debug.Log("Wrong Random Index");
@@ -346,8 +346,6 @@ public class LevelGenerator : MonoBehaviour {
                     case 0:
                         return spawns.Find("Bottom_left");
                     case 1:
-                        return spawns.Find("Bottom_middle");
-                    case 2:
                         return spawns.Find("Bottom_right");
                     default:
                         Debug.Log("Wrong Random Index");
@@ -359,8 +357,6 @@ public class LevelGenerator : MonoBehaviour {
                     case 0:
                         return spawns.Find("Left_top");
                     case 1:
-                        return spawns.Find("Left_middle");
-                    case 2:
                         return spawns.Find("Left_bottom");
                     default:
                         Debug.Log("Wrong Random Index");
@@ -372,8 +368,6 @@ public class LevelGenerator : MonoBehaviour {
                     case 0:
                         return spawns.Find("Right_top");
                     case 1:
-                        return spawns.Find("Right_middle");
-                    case 2:
                         return spawns.Find("Right_bottom");
                     default:
                         Debug.Log("Wrong Random Index");
