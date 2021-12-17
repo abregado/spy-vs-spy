@@ -65,6 +65,8 @@ public class LevelGenerator : MonoBehaviour {
     }
 
     private void PlaceFurniture() {
+        int count = 0;
+        
         foreach (Room room in rooms) {
             if (room.doors.Count < 2) {
                 Transform spawn = GetRandomSpawnPointForFurniture(room);
@@ -247,7 +249,7 @@ public class LevelGenerator : MonoBehaviour {
 
         for (int i = 0; i < spawnParent.childCount; i++) {
             Transform current = spawnParent.GetChild(i);
-            if (current.name == "Center") {
+            if (current.name == "Center" || current.name.Contains("Top")) {
                 continue;
             }
 
