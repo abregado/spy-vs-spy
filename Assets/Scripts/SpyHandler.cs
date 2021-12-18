@@ -31,6 +31,36 @@
                     KillAllSpiesExcept(-1);
                 }
             }
+
+            if (AtLeastOnePlayer() && AllSpiesDead()) {
+                foreach (Spy spy in spies) {
+                    if (spy.isPlaying && spy.isAlive == false) {
+                        spy.Respawn();    
+                    }
+                }
+            }
+            
+            
+        }
+
+        private bool AllSpiesDead() {
+            foreach (Spy spy in spies) {
+                if (spy.isAlive && spy.isPlaying) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool AtLeastOnePlayer() {
+            foreach (Spy spy in spies) {
+                if (spy.isPlaying) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void ResetTime() {

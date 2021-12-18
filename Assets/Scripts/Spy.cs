@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Rewired;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,6 +10,8 @@ public class Spy: MonoBehaviour {
     public G.ItemType inventory;
     public Room currentRoom;
 
+    public GameObject explosionPrefab;
+    public GameObject deathPrefab;
     public GameObject _stabPrefab;
 
     private MeshFilter _inventoryMesh;
@@ -66,24 +69,15 @@ public class Spy: MonoBehaviour {
         isAlive = false;
         _hasMadeInput = false;
         SetVisible(false);
-        if (_trapDeathParticles != null) {
-            _trapDeathParticles.Stop();
-        }
-        if (_spyDeathParticles != null) {
-            _spyDeathParticles.Stop();
-        }
     }
 
     private void Explode() {
-        if (_trapDeathParticles != null) {
-            _trapDeathParticles.Play();
-        }
+
+        Instantiate(explosionPrefab, transform.position, quaternion.identity);
     }
 
     private void BloodExplode() {
-        if (_spyDeathParticles != null) {
-            _spyDeathParticles.Play();
-        }
+        Instantiate(deathPrefab, transform.position+Vector3.up, quaternion.identity);
     }
     
     public void SetInventoryMesh() {
@@ -398,14 +392,15 @@ public class Spy: MonoBehaviour {
         cc.enabled = true;
 
         currentRoom = exitRoom;
-        _cameraSystem.SwitchCameraToRoom(playerIndex,2);
+        _cameraSystem.SwitchCameraToRoom(playerIndex,_cameraSystem.GetWinRoom());
         SetVisible(true);
         isAlive = true;
         isPlaying = false;
         _handler.KillAllSpiesExcept(playerIndex);
     }
 
-    private void Respawn() {
+    public void Respawn() {
+        StopAllCoroutines();
         Room emptyRoom = _handler.GetEmptyRoomForRespawn();
 
         cc.enabled = false;

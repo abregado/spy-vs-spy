@@ -22,6 +22,7 @@ public class LevelGenerator : MonoBehaviour {
     public GameObject doorPrefab;
     public GameObject doorSouthPrefab;
     public GameObject windoofPrefab;
+    public GameObject medicalPrefab;
     
     public Grid<RoomTile> grid;
     public List<Room> rooms = new List<Room>();
@@ -100,7 +101,14 @@ public class LevelGenerator : MonoBehaviour {
         }
 
         Debug.Log(count + "Searchable Furniture placed very tastefully");
-
+        
+        Room medicalRoom = rooms[Random.Range(0, rooms.Count)];
+        Transform medSpawn = GetRandomSpawnPointForFurniture(medicalRoom);
+        if (medSpawn != null) {
+            Instantiate(medicalPrefab, medSpawn);    
+            Debug.Log("Placed a medical cabinet");
+        }
+        
         count = 0;
         for (int i = 0; i < decoFurnitureCount; i++) {
             Room randomRoom = rooms[Random.Range(0, rooms.Count)];

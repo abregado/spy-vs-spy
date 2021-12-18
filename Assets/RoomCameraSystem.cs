@@ -34,17 +34,9 @@ public class RoomCameraSystem : MonoBehaviour {
             mapRoom.GetPlayerCamera(i).m_Lens.OrthographicSize = 25f;
         }
     }
-
-    public void SwitchCameraToRoom(int playerIndex, int roomIndex) {
-        if (rooms.Length < roomIndex) {
-            Debug.LogError("No room with index " + roomIndex + " found");
-        }
-        SetAllCameraToZero(playerIndex);
-        CinemachineVirtualCamera playerCamera = rooms[roomIndex].GetPlayerCamera(playerIndex);
-        playerCamera.Priority = 10;
-    }
     
     public void SwitchCameraToRoom(int playerIndex, Room room) {
+        Debug.Log("Swapping player to " + room.gameObject.name);
         foreach (Room editorRoom in rooms) {
             CinemachineVirtualCamera playerCamera = editorRoom.GetPlayerCamera(playerIndex);
             if (editorRoom != room) {
@@ -64,27 +56,49 @@ public class RoomCameraSystem : MonoBehaviour {
 
     public void SetCameraToMapMode(int playerIndex, bool mapModeOn) {
         LayerMask mask = LayerMask.GetMask();
-        if (mapModeOn) {
-            mask = LayerMask.GetMask("MiniMap");
-        } else {
-            if (playerIndex == 0) {
-                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", 
+        
+        if (playerIndex == 0) {
+            if (mapModeOn) {
+                {
+                    mask = LayerMask.GetMask("MiniMap", "Player1Camera");
+                }
+            } else  {
+                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast",
                     "Clickable", "Water", "UI", "Player1Camera");
             }
-            if (playerIndex == 1) {
-                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", 
+        }
+        if (playerIndex == 1) {
+            if (mapModeOn) {
+                {
+                    mask = LayerMask.GetMask("MiniMap", "Player2Camera");
+                }
+            } else  {
+                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast",
                     "Clickable", "Water", "UI", "Player2Camera");
             }
-            if (playerIndex == 2) {
-                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", 
+        }
+        if (playerIndex == 2) {
+            if (mapModeOn) {
+                {
+                    mask = LayerMask.GetMask("MiniMap", "Player3Camera");
+                }
+            } else  {
+                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast",
                     "Clickable", "Water", "UI", "Player3Camera");
             }
-            if (playerIndex == 3) {
-                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", 
+        }
+        if (playerIndex == 3) {
+            if (mapModeOn) {
+                {
+                    mask = LayerMask.GetMask("MiniMap", "Player4Camera");
+                }
+            } else  {
+                mask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast",
                     "Clickable", "Water", "UI", "Player4Camera");
             }
-            
         }
+            
+        
 
         playerCameras[playerIndex].cullingMask = mask.value;
     }
