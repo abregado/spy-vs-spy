@@ -13,12 +13,21 @@ public class Furniture: MonoBehaviour, IInteractable, ICanBeTrapped {
     private DOTweenAnimation _animation;
     private BriefcaseHandler _briefcase;
     private BriefcaseUI _ui;
+    private float nextTrappedAnimationCycle;
 
     public void Init(Room room) {
         _animation = transform.Find("View").GetComponent<DOTweenAnimation>();
         _briefcase = FindObjectOfType<BriefcaseHandler>();
         _ui = FindObjectOfType<BriefcaseUI>();
         myRoom = room;
+    }
+
+    void Update() {
+        if (isTrapped && Time.time > nextTrappedAnimationCycle) {
+            PlayTrappedAnimation();
+            nextTrappedAnimationCycle =
+                Time.time + Random.Range(G.FURNITURE_MIN_WIGGLE_TIME, G.FURNITURE_MAX_WIGGLE_TIME);
+        }
     }
     
     public virtual void OnInteract(Spy spy) {
@@ -44,8 +53,13 @@ public class Furniture: MonoBehaviour, IInteractable, ICanBeTrapped {
     }
 
     private void PlaySearchAnimation() {
-        _animation.DORestart();
-        _animation.DOPlay();
+        _animation.DORestartById("search");
+        _animation.DOPlayById("search");
+    }
+
+    private void PlayTrappedAnimation() {
+        _animation.DORestartById("trapped");
+        _animation.DOPlayById("trapped");
     }
     
     public void OnTrapSet(Spy spy) {
@@ -59,6 +73,8 @@ public class Furniture: MonoBehaviour, IInteractable, ICanBeTrapped {
         if (isTrapped == false) {
             Debug.Log("Setting Trap");
             isTrapped = true;
+            nextTrappedAnimationCycle =
+                Time.time + Random.Range(G.FURNITURE_MIN_WIGGLE_TIME, G.FURNITURE_MAX_WIGGLE_TIME);
             PlaySearchAnimation();
         }
     }

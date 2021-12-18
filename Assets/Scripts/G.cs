@@ -13,6 +13,9 @@ public static class G {
     public const float MAX_MOVE_SPEED = 3.0f;
     public const float SPEED_RESET_TIME = 0.5f;
 
+    public const float FURNITURE_MAX_WIGGLE_TIME = 6f;
+    public const float FURNITURE_MIN_WIGGLE_TIME = 11f;
+
     public const float TIME_LIMIT = 600f;
 
     public enum GridDir {
