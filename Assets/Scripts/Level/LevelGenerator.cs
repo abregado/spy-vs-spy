@@ -251,6 +251,10 @@ public class LevelGenerator : MonoBehaviour {
                 }
             }
         }
+
+        foreach (Room room in rooms) {
+            room.InitDoorIndicators();
+        }
     }
 
     private ExitDoor SpawnExit(Transform parent, G.GridDir dir) {
